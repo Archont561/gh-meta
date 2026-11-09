@@ -5,7 +5,7 @@ The locked developer environment lives in `pixi.toml` and `pixi.lock`
 
 ## Provisioning with Pixi
 
-Install Pixi (`v0.83.0` or newer), then provision both Pixi and Bun tools:
+Install Pixi (`v0.81.0` or newer), then provision both Pixi and Bun tools:
 
 ```sh
 pixi install --locked
