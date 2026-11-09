@@ -1,0 +1,31 @@
+{
+  "name": "gh-meta-dev",
+  "private": true,
+  "version": "0.1.0",
+  "description": "gh-meta — Your .github/ directory, managed as code. Early version-only Rust CLI scaffold with developer CLIs provisioned here and in pixi.lock.",
+  "author": "Archont561",
+  "license": "MIT",
+  "homepage": "https://github.com/Archont561/gh-meta#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Archont561/gh-meta.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Archont561/gh-meta/issues"
+  },
+  "packageManager": "bun@1.4.2",
+  "devDependencies": {
+    "@eugeniughelbur/agents-md": "0.1.0",
+    "backlog.md": "1.55.3",
+    "markdownlint-cli2": "0.24.0",
+    "readme-md-generator": "1.0.0",
+    "skills": "1.7.6"
+  },
+  "scripts": {
+    "build": "pixi run --locked build-release",
+    "test": "pixi run --locked test-all",
+    "lint": "pixi run --locked clippy",
+    "format": "pixi run --locked fmt-check",
+    "typecheck": "pixi run --locked typecheck"
+  }
+}

@@ -1,0 +1,9 @@
+target-version = "py311"
+line-length = 100
+
+[lint]
+select = ["E", "F", "W", "B", "UP"]
+extend-select = ["I", "PTH"]
+
+[lint.isort]
+known-first-party = ["automation"]
