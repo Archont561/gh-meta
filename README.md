@@ -7,7 +7,7 @@
   <a href="https://github.com/Archont561/gh-meta/graphs/commit-activity" target="_blank">
     <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
   </a>
-  <a href="https://github.com/Archont561/gh-meta/blob/main/LICENSE" target="_blank">
+  <a href="LICENSE" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/github/license/Archont561/gh-meta" />
   </a>
 </p>
@@ -70,7 +70,7 @@ pixi run --locked test-all
 
 ## 🤝 Contributing
 
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/Archont561/gh-meta/issues). You can also take a look at the [contributing guide](https://github.com/Archont561/gh-meta/blob/main/CONTRIBUTING.md).
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/Archont561/gh-meta/issues). You can also take a look at the [contributing guide](CONTRIBUTING.md).
 
 ## Show your support
 
@@ -79,7 +79,7 @@ Give a ⭐️ if this project helped you!
 ## 📝 License
 
 Copyright © 2026 [Archont561](https://github.com/Archont561).<br />
-This project is [MIT](https://github.com/Archont561/gh-meta/blob/main/LICENSE) licensed.
+This project is [MIT](LICENSE) licensed.
 
 ***
 _This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
