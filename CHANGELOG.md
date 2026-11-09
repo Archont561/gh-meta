@@ -10,3 +10,8 @@ fails when the committed copy has drifted. Edit the commit messages, not the
 file.
 
 ## [Unreleased]
+
+### Added
+
+* **automation:** add doit automation catalog and checks
+([0724e2b](https://github.com/Archont561/gh-meta/commit/0724e2be330874f51a93dc05921c3451d07d31ca))
