@@ -1,0 +1,5 @@
+[advisories]
+ignore = [
+  # Dev-dependency only via rstest-bdd 0.6.0 -> basic-toml; checked by automation/check_advisory_exception.py.
+  "RUSTSEC-2026-0374",
+]

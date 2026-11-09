@@ -1,0 +1,20 @@
+[package]
+name = "gh-meta-core"
+description = "Core crate for gh-meta (initial version-only scaffold)"
+readme = "README.md"
+exclude = ["features/", "tests/*_bdd.rs"]
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+rstest.workspace = true
+rstest-bdd.workspace = true
+rstest-bdd-macros.workspace = true

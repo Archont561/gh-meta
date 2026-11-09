@@ -1,0 +1,13 @@
+exclude = [
+  ".pixi/**",
+  ".pixi-sandbox/**",
+  "target/**",
+  "node_modules/**",
+  "output/**",
+  "npm/**",
+  "dist/**",
+]
+
+[formatting]
+column_width = 100
+indent_string = "  "

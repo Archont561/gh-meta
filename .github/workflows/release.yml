@@ -1,0 +1,485 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Release tag to build and publish (e.g. v0.1.0). Leave empty for dry-run artifacts only.
+        type: string
+        default: ""
+
+concurrency:
+  group: release-${{ inputs.version || github.ref_name }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    name: Validate release metadata
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      is_release: ${{ steps.check.outputs.is_release }}
+      tag: ${{ steps.check.outputs.tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ inputs.version || github.ref }}
+      - name: Set up Pixi
+        uses: prefix-dev/setup-pixi@ad1da6449d9e506fd127fd67ab2d054a769f6a94 # v0.11.2
+        with:
+          pixi-version: v0.83.0
+          cache: true
+          frozen: true
+      - name: Verify manifest parity and package metadata
+        run: |
+          pixi run --frozen automation bump_version --check
+          pixi run --frozen automation check_packages
+      - name: Resolve release target and verify tag version parity
+        id: check
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          is_release=false
+          tag=""
+          if [[ "$GITHUB_REF" == refs/tags/v* ]] || [[ -n "$INPUT_VERSION" ]]; then
+            is_release=true
+            raw_ref="${INPUT_VERSION:-$GITHUB_REF_NAME}"
+            tag="${raw_ref#refs/tags/}"
+            if [[ ! "$tag" =~ ^v([0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?)$ ]]; then
+              echo "::error::Release ref '$raw_ref' must match v<semver> (for example, v0.1.0)"
+              exit 1
+            fi
+            tag_version="${BASH_REMATCH[1]}"
+            pkg_version="$(pixi run --frozen automation run -r error-only bump_version --print-version)"
+            if [[ "$tag_version" != "$pkg_version" ]]; then
+              echo "::error::Tag version '$tag_version' does not match workspace version '$pkg_version'"
+              exit 1
+            fi
+          fi
+          echo "is_release=$is_release" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+  build:
+    name: Build ${{ matrix.asset }} (${{ matrix.conda_platform }})
+    needs: preflight
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-latest
+            rust_target: x86_64-unknown-linux-musl
+            wheel_target: x86_64-unknown-linux-gnu
+            manylinux: "2_28"
+            sdist_flag: "--sdist"
+            asset: gh-meta-linux-amd64
+            conda_platform: linux-64
+            ext: ""
+          - runner: ubuntu-24.04-arm
+            rust_target: aarch64-unknown-linux-musl
+            wheel_target: aarch64-unknown-linux-gnu
+            manylinux: "2_28"
+            sdist_flag: ""
+            asset: gh-meta-linux-arm64
+            conda_platform: linux-aarch64
+            ext: ""
+          - runner: macos-15-intel
+            rust_target: x86_64-apple-darwin
+            wheel_target: x86_64-apple-darwin
+            manylinux: ""
+            sdist_flag: ""
+            asset: gh-meta-darwin-amd64
+            conda_platform: osx-64
+            ext: ""
+          - runner: macos-14
+            rust_target: aarch64-apple-darwin
+            wheel_target: aarch64-apple-darwin
+            manylinux: ""
+            sdist_flag: ""
+            asset: gh-meta-darwin-arm64
+            conda_platform: osx-arm64
+            ext: ""
+          - runner: windows-latest
+            rust_target: x86_64-pc-windows-msvc
+            wheel_target: x86_64-pc-windows-msvc
+            manylinux: ""
+            sdist_flag: ""
+            asset: gh-meta-windows-amd64.exe
+            conda_platform: win-64
+            ext: ".exe"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ inputs.version || github.ref }}
+      - name: Cache Rust artifacts
+        uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          shared-key: release-${{ matrix.rust_target }}
+      - name: Install Rust target
+        run: rustup target add ${{ matrix.rust_target }}
+      - name: Install musl toolchain on Linux
+        if: contains(matrix.rust_target, 'musl')
+        run: sudo apt-get update && sudo apt-get install -y musl-tools
+      - name: Build standalone binary (${{ matrix.rust_target }})
+        run: cargo build --release --locked --package gh-meta --target ${{ matrix.rust_target }}
+      - name: Stage standalone binary
+        shell: bash
+        env:
+          RUST_TARGET: ${{ matrix.rust_target }}
+          ASSET_NAME: ${{ matrix.asset }}
+          BIN_EXT: ${{ matrix.ext }}
+        run: |
+          mkdir -p dist/bin
+          cp "target/$RUST_TARGET/release/gh-meta$BIN_EXT" "dist/bin/$ASSET_NAME"
+      - name: Upload standalone binary artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: binary-${{ matrix.rust_target }}
+          path: dist/bin/${{ matrix.asset }}
+          if-no-files-found: error
+          retention-days: 7
+      - name: Upload npm binary artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: npm-bin-${{ matrix.rust_target }}
+          path: target/${{ matrix.rust_target }}/release/gh-meta${{ matrix.ext }}
+          if-no-files-found: error
+          retention-days: 7
+      - name: Set up Pixi packaging environment
+        uses: prefix-dev/setup-pixi@ad1da6449d9e506fd127fd67ab2d054a769f6a94 # v0.11.2
+        with:
+          pixi-version: v0.83.0
+          environments: packaging
+          cache: false
+      - name: Build Conda package (${{ matrix.conda_platform }})
+        run: pixi run --frozen -e packaging package
+      - name: Upload Conda package
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: conda-${{ matrix.conda_platform }}
+          path: output/**/*.conda
+          if-no-files-found: error
+          retention-days: 7
+      - name: Build PyPI wheel and source distribution
+        uses: PyO3/maturin-action@e83996d129638aa358a18fbd1dfb82f0b0fb5d3b # v1.51.0
+        with:
+          command: build
+          maturin-version: "1.16.0"
+          manylinux: ${{ matrix.manylinux }}
+          target: ${{ matrix.wheel_target }}
+          args: --release --locked --compatibility pypi --manifest-path crates/gh-meta/Cargo.toml --out dist/wheels ${{ matrix.sdist_flag }}
+      - name: Upload PyPI distributions
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: pypi-${{ matrix.conda_platform }}
+          path: dist/wheels/*
+          if-no-files-found: error
+          retention-days: 7
+
+  verify:
+    name: Verify release artifacts
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ inputs.version || github.ref }}
+          persist-credentials: false
+      - name: Cache Cargo registry downloads
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: |
+            ~/.cargo/registry/cache
+            ~/.cargo/registry/index
+          key: ${{ runner.os }}-cargo-registry-v1-${{ hashFiles('Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-registry-v1-
+      - name: Download standalone binaries
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          path: dist/binaries
+          pattern: binary-*
+          merge-multiple: true
+      - name: Download Conda packages
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          path: dist/conda
+          pattern: conda-*
+      - name: Download PyPI distributions
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          path: dist/wheels
+          pattern: pypi-*
+          merge-multiple: true
+      - name: Download npm binary artifacts
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          path: dist/npm-bins
+          pattern: npm-bin-*
+      - name: Verify standalone, Conda, and PyPI artifacts
+        shell: bash
+        run: |
+          for asset in \
+            gh-meta-linux-amd64 \
+            gh-meta-linux-arm64 \
+            gh-meta-darwin-amd64 \
+            gh-meta-darwin-arm64 \
+            gh-meta-windows-amd64.exe; do
+            test -s "dist/binaries/$asset"
+          done
+          chmod +x dist/binaries/gh-meta-linux-amd64
+          dist/binaries/gh-meta-linux-amd64 --version
+
+          conda_count="$(find dist/conda -type f -name '*.conda' | wc -l)"
+          wheel_count="$(find dist/wheels -maxdepth 1 -type f -name '*.whl' | wc -l)"
+          sdist_count="$(find dist/wheels -maxdepth 1 -type f -name '*.tar.gz' | wc -l)"
+          test "$conda_count" -eq 5
+          test "$wheel_count" -eq 5
+          test "$sdist_count" -eq 1
+          ls -lh dist/binaries dist/wheels
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+      - name: Install cargo-npm
+        shell: bash
+        run: |
+          mkdir -p "$HOME/.local/bin"
+          curl -fsSL https://github.com/abemedia/cargo-npm/releases/download/v0.1.4/cargo-npm-x86_64-unknown-linux-musl.tar.gz -o /tmp/cargo-npm.tar.gz
+          echo "f5ac3420dcef6169a9009efc08246dab2118b4adf9719ee43f9186fd65c3d612  /tmp/cargo-npm.tar.gz" | sha256sum -c -
+          tar -xzf /tmp/cargo-npm.tar.gz -C "$HOME/.local/bin" cargo-npm
+          chmod +x "$HOME/.local/bin/cargo-npm"
+          rm -f /tmp/cargo-npm.tar.gz
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: Stage npm binaries and verify cargo-npm generation
+        shell: bash
+        run: |
+          for triple in \
+            x86_64-unknown-linux-musl \
+            aarch64-unknown-linux-musl \
+            x86_64-apple-darwin \
+            aarch64-apple-darwin; do
+            mkdir -p "target/$triple/release"
+            cp "dist/npm-bins/npm-bin-$triple/gh-meta" "target/$triple/release/gh-meta"
+            chmod +x "target/$triple/release/gh-meta"
+          done
+          mkdir -p target/x86_64-pc-windows-msvc/release
+          cp dist/npm-bins/npm-bin-x86_64-pc-windows-msvc/gh-meta.exe target/x86_64-pc-windows-msvc/release/gh-meta.exe
+
+          cargo npm generate -p gh-meta --out-dir dist/npm
+          test -s dist/npm/gh-meta/package.json
+          for pkg in linux-x64 linux-arm64 darwin-x64 darwin-arm64 win32-x64; do
+            test -s "dist/npm/@archont561/gh-meta-$pkg/package.json"
+          done
+          NODE_PATH="$PWD/dist/npm" node dist/npm/gh-meta/bin/gh-meta.js --version
+
+  github_release:
+    name: Publish GitHub Release
+    needs: [preflight, verify]
+    if: ${{ needs.preflight.outputs.is_release == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ inputs.version || github.ref }}
+          fetch-depth: 0
+      - name: Download standalone binaries
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          path: dist/binaries
+          pattern: binary-*
+          merge-multiple: true
+      - name: Download Conda packages
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          path: dist/conda
+          pattern: conda-*
+      - name: Generate SHA256SUMS and stage release assets
+        shell: bash
+        run: |
+          mkdir -p release-assets
+          cp dist/binaries/* release-assets/
+          chmod +x release-assets/gh-meta-linux-* release-assets/gh-meta-darwin-*
+          while IFS= read -r conda_pkg; do
+            cp "$conda_pkg" release-assets/
+          done < <(find dist/conda -type f -name '*.conda' | sort)
+          (cd release-assets && sha256sum -- gh-meta-* ./*.conda > SHA256SUMS)
+      - name: Create or update GitHub Release
+        uses: softprops/action-gh-release@8a0cd651e5b2365bd640854a3fa5dfc70e4875f3 # v3.0.4
+        with:
+          tag_name: ${{ needs.preflight.outputs.tag }}
+          name: ${{ needs.preflight.outputs.tag }}
+          files: release-assets/*
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+
+  publish_prefix:
+    name: Publish to prefix.dev
+    needs: [preflight, verify]
+    if: ${{ needs.preflight.outputs.is_release == 'true' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: prefix
+      url: https://prefix.dev/channels/archont561/archont561
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ inputs.version || github.ref }}
+          persist-credentials: false
+      - name: Set up Pixi packaging environment
+        uses: prefix-dev/setup-pixi@ad1da6449d9e506fd127fd67ab2d054a769f6a94 # v0.11.2
+        with:
+          pixi-version: v0.83.0
+          environments: packaging
+          cache: false
+          frozen: true
+      - name: Download Conda packages
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          path: dist/conda
+          pattern: conda-*
+      - name: Upload Conda packages via OIDC
+        shell: bash
+        run: |
+          test -n "${ACTIONS_ID_TOKEN_REQUEST_URL:-}"
+          test -n "${ACTIONS_ID_TOKEN_REQUEST_TOKEN:-}"
+          mapfile -t conda_files < <(find dist/conda -type f -name '*.conda' | sort)
+          test "${#conda_files[@]}" -eq 5
+          pixi run --frozen -e packaging rattler-build upload prefix \
+            --channel archont561/archont561 \
+            --generate-attestation \
+            --skip-existing \
+            "${conda_files[@]}"
+
+  publish_pypi:
+    name: Publish to PyPI
+    needs: [preflight, verify]
+    if: ${{ needs.preflight.outputs.is_release == 'true' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/gh-meta
+    permissions:
+      id-token: write
+    steps:
+      - name: Download PyPI distributions
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          path: dist/wheels
+          pattern: pypi-*
+          merge-multiple: true
+      - name: Verify OIDC token environment and distributions
+        shell: bash
+        run: |
+          test -n "${ACTIONS_ID_TOKEN_REQUEST_URL:-}"
+          test -n "${ACTIONS_ID_TOKEN_REQUEST_TOKEN:-}"
+          test "$(find dist/wheels -maxdepth 1 -type f -name '*.whl' | wc -l)" -eq 5
+          test "$(find dist/wheels -maxdepth 1 -type f -name '*.tar.gz' | wc -l)" -eq 1
+      - name: Publish distributions to PyPI via Trusted Publishing
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
+        with:
+          packages-dir: dist/wheels
+
+  publish_npm:
+    name: Publish to npm
+    needs: [preflight, verify]
+    if: ${{ needs.preflight.outputs.is_release == 'true' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: npm
+      url: https://www.npmjs.com/package/gh-meta
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ inputs.version || github.ref }}
+          persist-credentials: false
+      - name: Cache Cargo registry downloads
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: |
+            ~/.cargo/registry/cache
+            ~/.cargo/registry/index
+          key: ${{ runner.os }}-cargo-registry-v1-${{ hashFiles('Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-registry-v1-
+      - name: Download npm binary artifacts
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          path: dist/npm-bins
+          pattern: npm-bin-*
+      - name: Set up Node.js without token .npmrc override
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+      - name: Ensure npm supports OIDC Trusted Publishing
+        shell: bash
+        run: |
+          test -n "${ACTIONS_ID_TOKEN_REQUEST_URL:-}"
+          test -n "${ACTIONS_ID_TOKEN_REQUEST_TOKEN:-}"
+          npm_version="$(npm --version)"
+          node -e '
+            const parts = process.argv[1].split(".").map(Number);
+            const ok = parts[0] > 11 || (parts[0] === 11 && (parts[1] > 5 || (parts[1] === 5 && parts[2] >= 1)));
+            if (!ok) process.exit(1);
+          ' "$npm_version" || npm install -g "npm@^11.5.1"
+          npm --version
+      - name: Install cargo-npm
+        shell: bash
+        run: |
+          mkdir -p "$HOME/.local/bin"
+          curl -fsSL https://github.com/abemedia/cargo-npm/releases/download/v0.1.4/cargo-npm-x86_64-unknown-linux-musl.tar.gz -o /tmp/cargo-npm.tar.gz
+          echo "f5ac3420dcef6169a9009efc08246dab2118b4adf9719ee43f9186fd65c3d612  /tmp/cargo-npm.tar.gz" | sha256sum -c -
+          tar -xzf /tmp/cargo-npm.tar.gz -C "$HOME/.local/bin" cargo-npm
+          chmod +x "$HOME/.local/bin/cargo-npm"
+          rm -f /tmp/cargo-npm.tar.gz
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: Generate and smoke-test npm packages
+        shell: bash
+        run: |
+          for triple in \
+            x86_64-unknown-linux-musl \
+            aarch64-unknown-linux-musl \
+            x86_64-apple-darwin \
+            aarch64-apple-darwin; do
+            mkdir -p "target/$triple/release"
+            cp "dist/npm-bins/npm-bin-$triple/gh-meta" "target/$triple/release/gh-meta"
+            chmod +x "target/$triple/release/gh-meta"
+          done
+          mkdir -p target/x86_64-pc-windows-msvc/release
+          cp dist/npm-bins/npm-bin-x86_64-pc-windows-msvc/gh-meta.exe target/x86_64-pc-windows-msvc/release/gh-meta.exe
+
+          cargo npm generate -p gh-meta --out-dir dist/npm
+          NODE_PATH="$PWD/dist/npm" node dist/npm/gh-meta/bin/gh-meta.js --version
+      - name: Publish npm packages via OIDC Trusted Publishing
+        shell: bash
+        run: cargo npm publish -p gh-meta --out-dir dist/npm -- --access public --provenance

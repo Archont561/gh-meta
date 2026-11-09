@@ -1,0 +1,42 @@
+[package]
+name = "gh-meta"
+description = "Your .github/ directory, managed as code (standalone CLI and gh extension)"
+readme = "README.md"
+exclude = ["features/", "tests/*_bdd.rs", "pyproject.toml", "recipe/"]
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[[bin]]
+name = "gh-meta"
+path = "src/main.rs"
+
+[package.metadata.npm]
+prefix = "@archont561/gh-meta-"
+bins = ["gh-meta"]
+targets = [
+  "x86_64-unknown-linux-musl",
+  "aarch64-unknown-linux-musl",
+  "x86_64-apple-darwin",
+  "aarch64-apple-darwin",
+  "x86_64-pc-windows-msvc",
+]
+custom = { publishConfig = { access = "public", provenance = true } }
+
+[lints]
+workspace = true
+
+[dependencies]
+clap.workspace = true
+gh-meta-core.workspace = true
+
+[dev-dependencies]
+assert_cmd.workspace = true
+predicates.workspace = true
+rstest.workspace = true
+rstest-bdd.workspace = true
+rstest-bdd-macros.workspace = true

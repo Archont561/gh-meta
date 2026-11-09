@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "gh-meta dependabot.yml policy",
+  "description": "Enforce v2 Dependabot config covering cargo, bun, and github-actions ecosystems.",
+  "type": "object",
+  "required": ["version", "updates"],
+  "properties": {
+    "version": {
+      "const": 2
+    },
+    "updates": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["package-ecosystem", "directory", "schedule"],
+        "properties": {
+          "package-ecosystem": {
+            "enum": ["cargo", "bun", "github-actions"]
+          },
+          "directory": {
+            "type": "string",
+            "minLength": 1
+          },
+          "schedule": {
+            "type": "object",
+            "required": ["interval"],
+            "properties": {
+              "interval": {
+                "enum": ["daily", "weekly", "monthly"]
+              }
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "required": ["package-ecosystem"],
+            "properties": {
+              "package-ecosystem": { "const": "cargo" }
+            }
+          }
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["package-ecosystem"],
+            "properties": {
+              "package-ecosystem": { "const": "bun" }
+            }
+          }
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["package-ecosystem"],
+            "properties": {
+              "package-ecosystem": { "const": "github-actions" }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
