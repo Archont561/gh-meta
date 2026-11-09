@@ -1,0 +1,50 @@
+name: Bug Report
+description: Something in the CLI, scripts, checks, or packaging behaves incorrectly
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Include exact commands and observed output.
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      description: Output of `gh-meta --version` or commit SHA.
+      placeholder: "gh-meta 0.1.0"
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Expected vs actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Run `pixi run --locked ...`
+        2. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: |
+        - OS and architecture:
+        - pixi --version:
+        - rustc --version:
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Relevant output with secrets redacted.
+      render: shell
+    validations:
+      required: false
