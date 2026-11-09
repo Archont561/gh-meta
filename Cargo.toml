@@ -1,0 +1,33 @@
+[workspace]
+members = ["crates/gh-meta-core", "crates/gh-meta"]
+resolver = "3"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+license = "MIT"
+homepage = "https://github.com/Archont561/gh-meta"
+repository = "https://github.com/Archont561/gh-meta"
+authors = ["Archont561 <142521648+Archont561@users.noreply.github.com>"]
+
+[workspace.dependencies]
+gh-meta-core = { path = "crates/gh-meta-core", version = "0.1.0" }
+clap = { version = "4.6", default-features = false, features = [
+  "std",
+  "help",
+  "usage",
+  "error-context",
+] }
+assert_cmd = "2.2"
+predicates = "3.1"
+rstest = "0.28.0"
+rstest-bdd = "=0.6.0"
+rstest-bdd-macros = { version = "=0.6.0", features = ["strict-compile-time-validation"] }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+unused_must_use = "deny"
+
+[workspace.lints.clippy]
+pedantic = { level = "warn", priority = -1 }

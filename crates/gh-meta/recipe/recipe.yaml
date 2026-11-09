@@ -1,0 +1,59 @@
+# Conda package recipe for the standalone gh-meta CLI binary.
+schema_version: 1
+
+context:
+  version: "0.1.0"
+
+package:
+  name: gh-meta
+  version: ${{ version }}
+
+source:
+  - path: ../../..
+    filter:
+      exclude:
+        - ".pixi/**"
+        - ".pixi-sandbox/**"
+        - "target/**"
+        - "output/**"
+        - "dist/**"
+        - "build/**"
+        - "npm/**"
+        - "node_modules/**"
+        - ".git/**"
+        - "coverage/**"
+        - "**/*.conda"
+
+build:
+  number: 0
+  script:
+    env:
+      CARGO_PROFILE_RELEASE_CODEGEN_UNITS: "16"
+    content:
+      - if: unix
+        then:
+          - cargo build --release --locked --package gh-meta
+          - mkdir -p "$PREFIX/bin"
+          - install -m 0755 target/release/gh-meta "$PREFIX/bin/gh-meta"
+        else:
+          - cargo build --release --locked --package gh-meta
+          - if not exist "%LIBRARY_BIN%" mkdir "%LIBRARY_BIN%"
+          - copy /Y "target\release\gh-meta.exe" "%LIBRARY_BIN%\gh-meta.exe"
+
+requirements:
+  build:
+    - rust >=1.88,<2
+    - ${{ compiler('c') }}
+    - ${{ stdlib('c') }}
+
+tests:
+  - script:
+      - gh-meta --version
+      - gh-meta --help
+
+about:
+  summary: Your .github/ directory, managed as code
+  license: MIT
+  license_file: LICENSE
+  homepage: https://github.com/Archont561/gh-meta
+  repository: https://github.com/Archont561/gh-meta
