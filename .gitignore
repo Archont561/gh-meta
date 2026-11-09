@@ -1,0 +1,31 @@
+# Pixi & sandbox environments
+/.pixi/
+/.pixi-sandbox/
+
+# Cargo & Conda build artifacts
+/target/
+/output/
+/dist/
+/build/
+/npm/
+*.conda
+*.whl
+
+# Node / Bun tooling
+/node_modules/
+
+# Python caches, test outputs & coverage
+__pycache__/
+*.py[cod]
+*.egg-info/
+/.pytest_cache/
+/.ruff_cache/
+/.mypy_cache/
+/coverage/
+/.coverage
+/coverage.xml
+
+# Generated check/editor scratch files
+/AGENTS.generated.md
+/.doit.db*
+.DS_Store
