@@ -3,7 +3,7 @@ name = "gh-meta"
 version = "0.1.0"
 channels = ["conda-forge", "https://prefix.dev/archont561/archont561"]
 platforms = ["linux-64"]
-requires-pixi = ">=0.83.0"
+requires-pixi = ">=0.81.0"
 
 [dependencies]
 python = ">=3.11,<3.14"
