@@ -36,6 +36,9 @@ relock_paths = [
   "pixi.toml",
 ]
 permissions = true
+# The rendered release-sandbox workflows run this Pixi, and the generator also pins the relock
+# guard's setup-pixi step to it while every other workflow uses v0.83.0. `pixi.toml` therefore
+# keeps `requires-pixi` at a floor this release satisfies, so `pixi lock --check` passes there.
 pixi_version = "v0.83.0"
 setup_pixi_cache = false
 
