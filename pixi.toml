@@ -84,7 +84,7 @@ test = "cargo nextest run --workspace --locked"
 test-doc = "cargo test --workspace --doc --locked"
 test-all = { depends-on = ["test", "test-doc"] }
 build-release = "cargo build --release --locked --package gh-repoconf"
-coverage = "sh -c 'mkdir -p coverage && cargo llvm-cov nextest --workspace --locked --lcov --output-path coverage/lcov.info --ignore-filename-regex \"(^|/)(tests/|features/)\" && doit check_coverage'"
+coverage = "sh -c 'mkdir -p coverage && cargo llvm-cov nextest --workspace --locked --lcov --output-path coverage/lcov.info --ignore-filename-regex \"(^|/)(tests/|features/)\" && doit -f automation/dodo.py check_coverage'"
 test-automation = "python -m pytest automation/tests"
 test-automation-cov = "python -m pytest automation/tests --cov=automation --cov-report=term-missing --cov-config=.coveragerc"
 lint-python = "ruff check automation"
