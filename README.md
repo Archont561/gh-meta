@@ -12,7 +12,7 @@
   </a>
 </p>
 
-> Your .github/ directory, managed as code. Currently an early version-only scaffold establishing the two-crate Rust workspace, packaging pipelines, and repository automation before domain commands land.
+> Your .github/ directory, managed as code. An early Rust CLI scaffold: the two-crate workspace, packaging pipelines, and repository automation are in place, and the `clifacet` command seam is wired with no frontend enabled. Domain commands have not landed yet.
 
 ### 🏠 [Homepage](https://github.com/Archont561/gh-meta#readme)
 

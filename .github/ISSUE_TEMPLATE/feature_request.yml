@@ -5,8 +5,9 @@ body:
   - type: markdown
     attributes:
       value: |
-        `gh-meta` is currently an early version-only two-crate scaffold (`gh-meta-core`
-        and `gh-meta`). Proposals should align with `backlog/docs/` and ADRs in
+        `gh-meta` is currently an early two-crate scaffold (`gh-meta-core` and
+        `gh-meta`) with the `clifacet` command seam wired and no frontend enabled.
+        Proposals should align with `backlog/docs/` and ADRs in
         `backlog/decisions/`.
   - type: textarea
     id: problem

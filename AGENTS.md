@@ -30,7 +30,9 @@ editing task Markdown manually.
 
 - Keep the Cargo workspace at the intentional **version-only scaffold**
   (`crates/gh-meta-core` and `crates/gh-meta`, decision-3) until an approved
-  backlog task relaxes it.
+  backlog task relaxes it. The single recorded exception is `clifacet` 0.5.0
+  with every frontend feature disabled; enabling a frontend needs the `m-1`
+  task decision-2 requires.
 - Keep runtime dependencies minimal in `m-0`; interactive workflows target
   `Archont561/clifacet` (decision-2) in milestone `m-1`.
 - Keep every crate's `Cargo.toml` inheriting `version.workspace = true`, and

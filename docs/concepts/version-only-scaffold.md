@@ -8,7 +8,10 @@ before full `.github/` configuration synchronization features land.
 - `crates/gh-meta-core` exports `VERSION: &str = env!("CARGO_PKG_VERSION")`
   and `format_version_banner(binary: &str) -> String`.
 - `crates/gh-meta` exposes `gh-meta --version`, `-V`, `gh-meta version`, and
-  `--help` backed by `gh-meta-core`.
+  `--help` backed by `gh-meta-core`, and depends on `clifacet` 0.5.0 with every
+  frontend feature disabled. Credentials route through
+  `clifacet::secret::Secret`, so `gh_meta::redacted` renders them as
+  `[redacted]`.
 - `crates/gh-meta/recipe/recipe.yaml` packages the standalone `gh-meta` binary
   into a Conda artifact and tests `gh-meta --version` and `gh-meta --help`.
 - `automation/` and `dodo.py` deliver workspace version checking
