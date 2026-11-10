@@ -2,16 +2,16 @@
 id: decision-5
 title: Freeze gh-repoconf as the project name
 date: '2026-11-10'
-status: proposed
+status: accepted
 ---
 
 ## Context
 
-The project shipped as `gh-meta` — *Your `.github/` directory, managed as code.*
+The project shipped as **`gh-meta`** — *Your `.github/` directory, managed as code.*
 As scope discussions widened toward other repository concerns (`.devcontainer`,
 non-GitHub forges, contributor scaffolding), the name was re-examined, because
-`gh-meta` describes a narrow slice while the maintenance chores it removes are
-broader: generated files, license parity, version agreement, agent instructions,
+`gh-meta` describes a narrow slice ("metadata") while the maintenance chores it
+removes are broader: generated files, license parity, version agreement, agent instructions,
 and release plumbing are all "repository configuration", not `.github/` files.
 
 A rename has four distribution channels, three of which are permanent:

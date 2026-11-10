@@ -1,4 +1,4 @@
-# gh-meta Backlog Workspace
+# gh-repoconf Backlog Workspace
 
 This directory holds the product specification (`docs/`), Architecture Decision Records (`decisions/`), milestones (`milestones/`), and task cards (`tasks/`) managed via `pixi run --locked backlog`.
 

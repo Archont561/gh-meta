@@ -12,8 +12,8 @@ The full product vision spans multiple functional domains (schema modeling, `.gi
 ## Decision
 
 Begin with a cohesive two-crate Rust workspace:
-1. `crates/gh-meta-core` — library crate exposing `VERSION = env!("CARGO_PKG_VERSION")` and banner formatting.
-2. `crates/gh-meta` — standalone CLI binary crate (`gh-meta`) wrapping `gh-meta-core`.
+1. `crates/gh-repoconf-core` — library crate exposing `VERSION = env!("CARGO_PKG_VERSION")` and banner formatting.
+2. `crates/gh-repoconf` — standalone CLI binary crate (`gh-repoconf`) wrapping `gh-repoconf-core`.
 
 Both crates maintain co-located `{src,features,tests}` directories with `rstest-bdd` feature specs verified before new crates or exports are introduced.
 
