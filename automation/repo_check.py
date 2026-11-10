@@ -19,7 +19,7 @@ def check_repo(root: Path = ROOT) -> list[str]:
         problems.append("missing root LICENSE file")
     else:
         expected_license = root_license.read_text(encoding="utf-8")
-        for crate in ("gh-meta-core", "gh-meta"):
+        for crate in ("gh-repoconf-core", "gh-repoconf"):
             crate_license = root / "crates" / crate / "LICENSE"
             if not crate_license.is_file():
                 problems.append(f"missing crate LICENSE: crates/{crate}/LICENSE")

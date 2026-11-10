@@ -30,7 +30,7 @@ def tools_state(tmp_path: Path) -> ToolsState:
     return ToolsState(backlog_dir=tmp_path / "tasks", cargo_home=tmp_path / "cargo_home")
 
 
-@given("the live gh-meta repository workspace")
+@given("the live gh-repoconf repository workspace")
 def given_live_repo(tools_state: ToolsState) -> None:
     tools_state.root = ROOT
 

@@ -25,12 +25,12 @@ class VersionWorkspace:
 
 
 def _copy_manifests(dst: Path) -> None:
-    (dst / "crates" / "gh-meta" / "recipe").mkdir(parents=True, exist_ok=True)
+    (dst / "crates" / "gh-repoconf" / "recipe").mkdir(parents=True, exist_ok=True)
     for rel in (
         "Cargo.toml",
         "pixi.toml",
         "package.json",
-        "crates/gh-meta/recipe/recipe.yaml",
+        "crates/gh-repoconf/recipe/recipe.yaml",
     ):
         shutil.copy2(ROOT / rel, dst / rel)
     for crate in bump_version.WORKSPACE_CRATES:
@@ -44,7 +44,7 @@ def workspace(tmp_path: Path) -> VersionWorkspace:
     return VersionWorkspace(path=tmp_path)
 
 
-@given("the live gh-meta repository workspace")
+@given("the live gh-repoconf repository workspace")
 def given_live_workspace(workspace: VersionWorkspace) -> None:
     workspace.path = ROOT
 
@@ -58,7 +58,7 @@ def given_temp_workspace(workspace: VersionWorkspace, tmp_path: Path, version: s
         == bump_version.versions(
             (tmp_path / "Cargo.toml").read_text(encoding="utf-8"),
             (tmp_path / "pixi.toml").read_text(encoding="utf-8"),
-            (tmp_path / "crates" / "gh-meta" / "recipe" / "recipe.yaml").read_text(
+            (tmp_path / "crates" / "gh-repoconf" / "recipe" / "recipe.yaml").read_text(
                 encoding="utf-8"
             ),
             (tmp_path / "package.json").read_text(encoding="utf-8"),
@@ -68,7 +68,7 @@ def given_temp_workspace(workspace: VersionWorkspace, tmp_path: Path, version: s
 
 @given(parsers.parse('the temporary Conda recipe context version is changed to "{version}"'))
 def corrupt_recipe_version(workspace: VersionWorkspace, version: str) -> None:
-    recipe = workspace.path / "crates" / "gh-meta" / "recipe" / "recipe.yaml"
+    recipe = workspace.path / "crates" / "gh-repoconf" / "recipe" / "recipe.yaml"
     text = recipe.read_text(encoding="utf-8")
     recipe.write_text(
         text.replace('version: "0.1.0"', f'version: "{version}"', 1), encoding="utf-8"
@@ -134,7 +134,7 @@ def assert_bumped_cleanly(workspace: VersionWorkspace, version: str) -> None:
     sites = bump_version.versions(
         (workspace.path / "Cargo.toml").read_text(encoding="utf-8"),
         (workspace.path / "pixi.toml").read_text(encoding="utf-8"),
-        (workspace.path / "crates" / "gh-meta" / "recipe" / "recipe.yaml").read_text(
+        (workspace.path / "crates" / "gh-repoconf" / "recipe" / "recipe.yaml").read_text(
             encoding="utf-8"
         ),
         (workspace.path / "package.json").read_text(encoding="utf-8"),

@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-CRATES = ("gh-meta-core", "gh-meta")
+CRATES = ("gh-repoconf-core", "gh-repoconf")
 
 REQUIRED_FILES = ("Cargo.toml", "README.md", "LICENSE", "src/lib.rs")
 FORBIDDEN_PREFIXES = (
@@ -146,23 +146,28 @@ def metadata(crate: str, package: dict, workspace: dict) -> list[Finding]:
 
 
 def packaging_configs(root: Path = ROOT) -> list[Finding]:
-    """Verify PyPI (maturin) and npm (cargo-npm) configuration on `crates/gh-meta`."""
+    """Verify PyPI (maturin) and npm (cargo-npm) configuration on `crates/gh-repoconf`."""
     findings: list[Finding] = []
-    cli_cargo = root / "crates" / "gh-meta" / "Cargo.toml"
+    cli_cargo = root / "crates" / "gh-repoconf" / "Cargo.toml"
     cli_pkg = _table(cli_cargo, "package")
     npm_meta = cli_pkg.get("metadata", {}).get("npm", {})
 
-    if npm_meta.get("prefix") != "@archont561/gh-meta-":
+    if npm_meta.get("prefix") != "@archont561/gh-repoconf-":
         findings.append(
-            Finding("invalid-npm-metadata", "crates/gh-meta prefix must be '@archont561/gh-meta-'")
+            Finding(
+                "invalid-npm-metadata",
+                "crates/gh-repoconf prefix must be '@archont561/gh-repoconf-'",
+            )
         )
-    if npm_meta.get("bins") != ["gh-meta"]:
-        findings.append(Finding("invalid-npm-metadata", "crates/gh-meta bins must be ['gh-meta']"))
+    if npm_meta.get("bins") != ["gh-repoconf"]:
+        findings.append(
+            Finding("invalid-npm-metadata", "crates/gh-repoconf bins must be ['gh-repoconf']")
+        )
     if tuple(npm_meta.get("targets", ())) != NPM_EXPECTED_TARGETS:
         findings.append(
             Finding(
                 "invalid-npm-metadata",
-                "crates/gh-meta targets must match the five native release triples",
+                "crates/gh-repoconf targets must match the five native release triples",
             )
         )
     publish_cfg = npm_meta.get("custom", {}).get("publishConfig", {})
@@ -170,22 +175,22 @@ def packaging_configs(root: Path = ROOT) -> list[Finding]:
         findings.append(
             Finding(
                 "invalid-npm-metadata",
-                "crates/gh-meta custom.publishConfig must enable public access and provenance",
+                "crates/gh-repoconf custom.publishConfig must enable public access and provenance",
             )
         )
 
-    pyproject = root / "crates" / "gh-meta" / "pyproject.toml"
+    pyproject = root / "crates" / "gh-repoconf" / "pyproject.toml"
     if not pyproject.is_file():
         findings.append(
-            Finding("missing-pypi-manifest", "crates/gh-meta/pyproject.toml is missing")
+            Finding("missing-pypi-manifest", "crates/gh-repoconf/pyproject.toml is missing")
         )
         return findings
 
     py_data = tomllib.loads(pyproject.read_text(encoding="utf-8"))
     project = py_data.get("project", {})
     maturin = py_data.get("tool", {}).get("maturin", {})
-    if project.get("name") != "gh-meta":
-        findings.append(Finding("invalid-pypi-manifest", "project.name must be 'gh-meta'"))
+    if project.get("name") != "gh-repoconf":
+        findings.append(Finding("invalid-pypi-manifest", "project.name must be 'gh-repoconf'"))
     if "version" not in project.get("dynamic", []):
         findings.append(
             Finding("invalid-pypi-manifest", "project.dynamic must include 'version' from Cargo")

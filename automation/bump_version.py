@@ -15,14 +15,14 @@ from dataclasses import dataclass
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-WORKSPACE_CRATES = ("gh-meta-core", "gh-meta")
+WORKSPACE_CRATES = ("gh-repoconf-core", "gh-repoconf")
 
 SEMVER = re.compile(
     r"^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)"
     r"(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$"
 )
 WORKSPACE_VERSION = re.compile(r'^version\s*=\s*"([^"]*)"\s*$')
-CORE_REQUIREMENT = re.compile(r'^gh-meta-core\s*=\s*\{[^}]*version\s*=\s*"([^"]*)"')
+CORE_REQUIREMENT = re.compile(r'^gh-repoconf-core\s*=\s*\{[^}]*version\s*=\s*"([^"]*)"')
 RECIPE_VERSION = re.compile(r'^(\s*version\s*:\s*)"([^"]*)"\s*$')
 
 
@@ -93,7 +93,7 @@ def _read_recipe_version(recipe_text: str) -> str:
             match = RECIPE_VERSION.match(line)
             if match is not None:
                 return match.group(2)
-    raise ValueError("crates/gh-meta/recipe/recipe.yaml has no context.version entry")
+    raise ValueError("crates/gh-repoconf/recipe/recipe.yaml has no context.version entry")
 
 
 def _rewrite_recipe_version(recipe_text: str, version: str) -> str:
@@ -111,7 +111,7 @@ def _rewrite_recipe_version(recipe_text: str, version: str) -> str:
             if match is not None:
                 lines[index] = line[: match.start(2)] + version + line[match.end(2) :]
                 return "".join(lines)
-    raise ValueError("crates/gh-meta/recipe/recipe.yaml has no context.version entry")
+    raise ValueError("crates/gh-repoconf/recipe/recipe.yaml has no context.version entry")
 
 
 def _read_package_json_version(package_json_text: str) -> str:
@@ -138,14 +138,14 @@ def versions(cargo: str, pixi: str, recipe: str, package_json: str) -> list[Site
             _read_section(cargo, "[workspace.package]", WORKSPACE_VERSION),
         ),
         Site(
-            "Cargo.toml [workspace.dependencies] gh-meta-core",
+            "Cargo.toml [workspace.dependencies] gh-repoconf-core",
             _read_section(cargo, "[workspace.dependencies]", CORE_REQUIREMENT),
         ),
         Site(
             "pixi.toml [workspace] version",
             _read_section(pixi, "[workspace]", WORKSPACE_VERSION),
         ),
-        Site("crates/gh-meta/recipe/recipe.yaml context.version", _read_recipe_version(recipe)),
+        Site("crates/gh-repoconf/recipe/recipe.yaml context.version", _read_recipe_version(recipe)),
         Site("package.json version", _read_package_json_version(package_json)),
     ]
 
@@ -194,7 +194,9 @@ def check_root(root: Path = ROOT) -> list[str]:
     """Check version parity and workspace inheritance under `root`."""
     cargo = (root / "Cargo.toml").read_text(encoding="utf-8")
     pixi = (root / "pixi.toml").read_text(encoding="utf-8")
-    recipe = (root / "crates" / "gh-meta" / "recipe" / "recipe.yaml").read_text(encoding="utf-8")
+    recipe = (root / "crates" / "gh-repoconf" / "recipe" / "recipe.yaml").read_text(
+        encoding="utf-8"
+    )
     package_json = (root / "package.json").read_text(encoding="utf-8")
     problems = inconsistencies(cargo, pixi, recipe, package_json)
     problems.extend(crate_pins(root))
@@ -231,7 +233,7 @@ def main(argv: Sequence[str] | None = None, root: Path = ROOT) -> int:
     try:
         cargo_path = root / "Cargo.toml"
         pixi_path = root / "pixi.toml"
-        recipe_path = root / "crates" / "gh-meta" / "recipe" / "recipe.yaml"
+        recipe_path = root / "crates" / "gh-repoconf" / "recipe" / "recipe.yaml"
         pkg_path = root / "package.json"
 
         cargo = cargo_path.read_text(encoding="utf-8")

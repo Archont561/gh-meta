@@ -21,7 +21,7 @@ if str(ROOT) not in sys.path:
 CONFIG = ROOT / "vale.toml"
 INI = ROOT / ".vale.ini"
 STYLES = ROOT / ".vale" / "styles"
-STYLE = "GhMeta"
+STYLE = "GhRepoconf"
 ANNOTATION_LIMIT = 10
 
 CHECKS: dict[str, frozenset[str]] = {
