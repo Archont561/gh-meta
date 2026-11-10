@@ -48,7 +48,7 @@ jobs:
           set +e
           pixi run --frozen cargo install cargo-dist --version 0.34.0 --locked \
             > /tmp/probe/install.log 2>&1
-          echo "install_exit=$?"
+          echo "install_exit=$?" | tee /tmp/probe/install.exit
           tail -15 /tmp/probe/install.log
           echo "--- binaries landed in the cargo prefix ---"
           "$HOME/.cargo/bin/cargo-dist" --version 2>&1 || echo "(not in ~/.cargo/bin)"
@@ -79,12 +79,30 @@ jobs:
           set +e
           pixi run --frozen cargo add cargo-dist --dev --locked \
             > /tmp/probe/add.log 2>&1
-          echo "add_exit=$?"
+          echo "add_exit=$?" | tee /tmp/probe/add.exit
           tail -15 /tmp/probe/add.log
           echo "=== diff produced by cargo add ==="
           git diff --stat
           echo "=== new lock entries ==="
           git diff -- Cargo.lock | head -40
+
+      - name: Report diagnostics as annotations
+        if: always()
+        shell: bash
+        run: |
+          # Logs and artifacts are unreachable from the reviewing environment,
+          # so the decisive facts travel in annotations.
+          emit() { printf '::error title=%s::%s\n' "$1" "$2"; }
+          for f in install add; do
+            if [ -s /tmp/probe/$f.log ]; then
+              emit "${f}_LOG_HEAD" "$(head -c 700 /tmp/probe/$f.log | tr '\n' '|')"
+              emit "${f}_LOG_TAIL" "$(tail -c 500 /tmp/probe/$f.log | tr '\n' '|')"
+            else
+              emit "${f}_LOG" "missing or empty"
+            fi
+          done
+          emit LOCK_CHANGED "cargo-lock-changed=$(cmp -s Cargo.lock /tmp/probe/Cargo.lock.before && echo NO || echo YES)"
+          emit GIT_STATUS "$(git status --porcelain | tr '\n' '|' || echo none)"
 
       - name: Emit both patches
         shell: bash
