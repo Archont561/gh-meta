@@ -100,15 +100,15 @@ rules:
 
   - id: require-conda-recipe
     kind: file_exists
-    paths: crates/gh-meta/recipe/recipe.yaml
+    paths: crates/gh-repoconf/recipe/recipe.yaml
     level: error
-    message: Required crates/gh-meta/recipe/recipe.yaml is missing.
+    message: Required crates/gh-repoconf/recipe/recipe.yaml is missing.
 
   - id: require-conda-variants
     kind: file_exists
-    paths: crates/gh-meta/recipe/variants.yaml
+    paths: crates/gh-repoconf/recipe/variants.yaml
     level: error
-    message: Required crates/gh-meta/recipe/variants.yaml is missing.
+    message: Required crates/gh-repoconf/recipe/variants.yaml is missing.
 
   - id: require-bun-manifest
     kind: file_exists
@@ -202,9 +202,9 @@ rules:
 
   - id: require-pypi-manifest
     kind: file_exists
-    paths: crates/gh-meta/pyproject.toml
+    paths: crates/gh-repoconf/pyproject.toml
     level: error
-    message: Required crates/gh-meta/pyproject.toml is missing.
+    message: Required crates/gh-repoconf/pyproject.toml is missing.
 
   - id: crates-contain-required-files
     kind: dir_contains

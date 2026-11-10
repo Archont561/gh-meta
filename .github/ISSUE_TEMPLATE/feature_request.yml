@@ -1,12 +1,12 @@
 name: Feature Request
-description: Suggest an enhancement to gh-meta or its repository tooling
+description: Suggest an enhancement to gh-repoconf or its repository tooling
 labels: ["enhancement"]
 body:
   - type: markdown
     attributes:
       value: |
-        `gh-meta` is currently an early two-crate scaffold (`gh-meta-core` and
-        `gh-meta`) with the `clifacet` command seam wired and no frontend enabled.
+        `gh-repoconf` is currently an early two-crate scaffold (`gh-repoconf-core` and
+        `gh-repoconf`) with the `clifacet` command seam wired and no frontend enabled.
         Proposals should align with `backlog/docs/` and ADRs in
         `backlog/decisions/`.
   - type: textarea

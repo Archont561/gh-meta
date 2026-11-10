@@ -181,7 +181,7 @@ jobs:
       - name: Build standalone release binary
         run: pixi run --frozen build-release
       - name: Smoke-test standalone release binary
-        run: target/release/gh-meta --version
+        run: target/release/gh-repoconf --version
       - name: Upload source coverage to Codecov
         if: env.CODECOV_TOKEN != ''
         uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1

@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "gh-meta-dev",
+      "name": "gh-repoconf-dev",
       "devDependencies": {
         "@eugeniughelbur/agents-md": "0.1.0",
         "backlog.md": "1.55.3",

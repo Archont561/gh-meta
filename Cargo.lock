@@ -443,13 +443,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "gh-meta"
+name = "gh-repoconf"
 version = "0.1.0"
 dependencies = [
  "assert_cmd",
  "clap",
  "clifacet",
- "gh-meta-core",
+ "gh-repoconf-core",
  "predicates",
  "rstest",
  "rstest-bdd",
@@ -457,7 +457,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "gh-meta-core"
+name = "gh-repoconf-core"
 version = "0.1.0"
 dependencies = [
  "rstest",

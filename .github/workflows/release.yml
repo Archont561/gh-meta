@@ -87,7 +87,7 @@ jobs:
             wheel_target: x86_64-unknown-linux-gnu
             manylinux: "2_28"
             sdist_flag: "--sdist"
-            asset: gh-meta-linux-amd64
+            asset: gh-repoconf-linux-amd64
             conda_platform: linux-64
             ext: ""
           - runner: ubuntu-24.04-arm
@@ -95,7 +95,7 @@ jobs:
             wheel_target: aarch64-unknown-linux-gnu
             manylinux: "2_28"
             sdist_flag: ""
-            asset: gh-meta-linux-arm64
+            asset: gh-repoconf-linux-arm64
             conda_platform: linux-aarch64
             ext: ""
           - runner: macos-15-intel
@@ -103,7 +103,7 @@ jobs:
             wheel_target: x86_64-apple-darwin
             manylinux: ""
             sdist_flag: ""
-            asset: gh-meta-darwin-amd64
+            asset: gh-repoconf-darwin-amd64
             conda_platform: osx-64
             ext: ""
           - runner: macos-14
@@ -111,7 +111,7 @@ jobs:
             wheel_target: aarch64-apple-darwin
             manylinux: ""
             sdist_flag: ""
-            asset: gh-meta-darwin-arm64
+            asset: gh-repoconf-darwin-arm64
             conda_platform: osx-arm64
             ext: ""
           - runner: windows-latest
@@ -119,7 +119,7 @@ jobs:
             wheel_target: x86_64-pc-windows-msvc
             manylinux: ""
             sdist_flag: ""
-            asset: gh-meta-windows-amd64.exe
+            asset: gh-repoconf-windows-amd64.exe
             conda_platform: win-64
             ext: ".exe"
     steps:
@@ -137,7 +137,7 @@ jobs:
         if: contains(matrix.rust_target, 'musl')
         run: sudo apt-get update && sudo apt-get install -y musl-tools
       - name: Build standalone binary (${{ matrix.rust_target }})
-        run: cargo build --release --locked --package gh-meta --target ${{ matrix.rust_target }}
+        run: cargo build --release --locked --package gh-repoconf --target ${{ matrix.rust_target }}
       - name: Stage standalone binary
         shell: bash
         env:
@@ -146,7 +146,7 @@ jobs:
           BIN_EXT: ${{ matrix.ext }}
         run: |
           mkdir -p dist/bin
-          cp "target/$RUST_TARGET/release/gh-meta$BIN_EXT" "dist/bin/$ASSET_NAME"
+          cp "target/$RUST_TARGET/release/gh-repoconf$BIN_EXT" "dist/bin/$ASSET_NAME"
       - name: Upload standalone binary artifact
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
@@ -158,7 +158,7 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: npm-bin-${{ matrix.rust_target }}
-          path: target/${{ matrix.rust_target }}/release/gh-meta${{ matrix.ext }}
+          path: target/${{ matrix.rust_target }}/release/gh-repoconf${{ matrix.ext }}
           if-no-files-found: error
           retention-days: 7
       - name: Set up Pixi packaging environment
@@ -183,7 +183,7 @@ jobs:
           maturin-version: "1.16.0"
           manylinux: ${{ matrix.manylinux }}
           target: ${{ matrix.wheel_target }}
-          args: --release --locked --compatibility pypi --manifest-path crates/gh-meta/Cargo.toml --out dist/wheels ${{ matrix.sdist_flag }}
+          args: --release --locked --compatibility pypi --manifest-path crates/gh-repoconf/Cargo.toml --out dist/wheels ${{ matrix.sdist_flag }}
       - name: Upload PyPI distributions
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
@@ -239,15 +239,15 @@ jobs:
         shell: bash
         run: |
           for asset in \
-            gh-meta-linux-amd64 \
-            gh-meta-linux-arm64 \
-            gh-meta-darwin-amd64 \
-            gh-meta-darwin-arm64 \
-            gh-meta-windows-amd64.exe; do
+            gh-repoconf-linux-amd64 \
+            gh-repoconf-linux-arm64 \
+            gh-repoconf-darwin-amd64 \
+            gh-repoconf-darwin-arm64 \
+            gh-repoconf-windows-amd64.exe; do
             test -s "dist/binaries/$asset"
           done
-          chmod +x dist/binaries/gh-meta-linux-amd64
-          dist/binaries/gh-meta-linux-amd64 --version
+          chmod +x dist/binaries/gh-repoconf-linux-amd64
+          dist/binaries/gh-repoconf-linux-amd64 --version
 
           conda_count="$(find dist/conda -type f -name '*.conda' | wc -l)"
           wheel_count="$(find dist/wheels -maxdepth 1 -type f -name '*.whl' | wc -l)"
@@ -279,18 +279,18 @@ jobs:
             x86_64-apple-darwin \
             aarch64-apple-darwin; do
             mkdir -p "target/$triple/release"
-            cp "dist/npm-bins/npm-bin-$triple/gh-meta" "target/$triple/release/gh-meta"
-            chmod +x "target/$triple/release/gh-meta"
+            cp "dist/npm-bins/npm-bin-$triple/gh-repoconf" "target/$triple/release/gh-repoconf"
+            chmod +x "target/$triple/release/gh-repoconf"
           done
           mkdir -p target/x86_64-pc-windows-msvc/release
-          cp dist/npm-bins/npm-bin-x86_64-pc-windows-msvc/gh-meta.exe target/x86_64-pc-windows-msvc/release/gh-meta.exe
+          cp dist/npm-bins/npm-bin-x86_64-pc-windows-msvc/gh-repoconf.exe target/x86_64-pc-windows-msvc/release/gh-repoconf.exe
 
-          cargo npm generate -p gh-meta --out-dir dist/npm
-          test -s dist/npm/gh-meta/package.json
+          cargo npm generate -p gh-repoconf --out-dir dist/npm
+          test -s dist/npm/gh-repoconf/package.json
           for pkg in linux-x64 linux-arm64 darwin-x64 darwin-arm64 win32-x64; do
-            test -s "dist/npm/@archont561/gh-meta-$pkg/package.json"
+            test -s "dist/npm/@archont561/gh-repoconf-$pkg/package.json"
           done
-          NODE_PATH="$PWD/dist/npm" node dist/npm/gh-meta/bin/gh-meta.js --version
+          NODE_PATH="$PWD/dist/npm" node dist/npm/gh-repoconf/bin/gh-repoconf.js --version
 
   github_release:
     name: Publish GitHub Release
@@ -321,11 +321,11 @@ jobs:
         run: |
           mkdir -p release-assets
           cp dist/binaries/* release-assets/
-          chmod +x release-assets/gh-meta-linux-* release-assets/gh-meta-darwin-*
+          chmod +x release-assets/gh-repoconf-linux-* release-assets/gh-repoconf-darwin-*
           while IFS= read -r conda_pkg; do
             cp "$conda_pkg" release-assets/
           done < <(find dist/conda -type f -name '*.conda' | sort)
-          (cd release-assets && sha256sum -- gh-meta-* ./*.conda > SHA256SUMS)
+          (cd release-assets && sha256sum -- gh-repoconf-* ./*.conda > SHA256SUMS)
       - name: Create or update GitHub Release
         uses: softprops/action-gh-release@8a0cd651e5b2365bd640854a3fa5dfc70e4875f3 # v3.0.4
         with:
@@ -384,7 +384,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/p/gh-meta
+      url: https://pypi.org/p/gh-repoconf
     permissions:
       id-token: write
     steps:
@@ -413,7 +413,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: npm
-      url: https://www.npmjs.com/package/gh-meta
+      url: https://www.npmjs.com/package/gh-repoconf
     permissions:
       contents: read
       id-token: write
@@ -472,14 +472,14 @@ jobs:
             x86_64-apple-darwin \
             aarch64-apple-darwin; do
             mkdir -p "target/$triple/release"
-            cp "dist/npm-bins/npm-bin-$triple/gh-meta" "target/$triple/release/gh-meta"
-            chmod +x "target/$triple/release/gh-meta"
+            cp "dist/npm-bins/npm-bin-$triple/gh-repoconf" "target/$triple/release/gh-repoconf"
+            chmod +x "target/$triple/release/gh-repoconf"
           done
           mkdir -p target/x86_64-pc-windows-msvc/release
-          cp dist/npm-bins/npm-bin-x86_64-pc-windows-msvc/gh-meta.exe target/x86_64-pc-windows-msvc/release/gh-meta.exe
+          cp dist/npm-bins/npm-bin-x86_64-pc-windows-msvc/gh-repoconf.exe target/x86_64-pc-windows-msvc/release/gh-repoconf.exe
 
-          cargo npm generate -p gh-meta --out-dir dist/npm
-          NODE_PATH="$PWD/dist/npm" node dist/npm/gh-meta/bin/gh-meta.js --version
+          cargo npm generate -p gh-repoconf --out-dir dist/npm
+          NODE_PATH="$PWD/dist/npm" node dist/npm/gh-repoconf/bin/gh-repoconf.js --version
       - name: Publish npm packages via OIDC Trusted Publishing
         shell: bash
-        run: cargo npm publish -p gh-meta --out-dir dist/npm -- --access public --provenance
+        run: cargo npm publish -p gh-repoconf --out-dir dist/npm -- --access public --provenance

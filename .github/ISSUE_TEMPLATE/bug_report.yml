@@ -10,8 +10,8 @@ body:
     id: version
     attributes:
       label: Version or commit
-      description: Output of `gh-meta --version` or commit SHA.
-      placeholder: "gh-meta 0.1.0"
+      description: Output of `gh-repoconf --version` or commit SHA.
+      placeholder: "gh-repoconf 0.1.0"
     validations:
       required: true
   - type: textarea
