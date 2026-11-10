@@ -171,6 +171,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "aa8876b300ab35ba921adea3dfd70157a46249b33f95c9084ae5709785478946"
 dependencies = [
  "clap_builder",
+ "clap_derive",
 ]
 
 [[package]]
@@ -184,10 +185,45 @@ dependencies = [
 ]
 
 [[package]]
+name = "clap_derive"
+version = "4.6.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f9c751b79415d4e559e3d1fcf128e09e720eb673a06d26cf6f392d37d75b66e0"
+dependencies = [
+ "heck",
+ "proc-macro2",
+ "quote",
+ "syn 3.0.10",
+]
+
+[[package]]
 name = "clap_lex"
 version = "1.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1c133bc6a41be0d194c306b5506d15e6feeea7b1d6604bd3f8310dfb2ca96486"
+
+[[package]]
+name = "clifacet"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e38f0e9ca09e7011608e6b3ff9f5e12f6093ed583acab87462da607d1e1cfbd3"
+dependencies = [
+ "clap",
+ "clifacet-macros",
+ "thiserror 2.0.21",
+]
+
+[[package]]
+name = "clifacet-macros"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "96ef49e8acbb72638e1c28e3a2eab47386409fc91e39f3ba87fb00264294517b"
+dependencies = [
+ "heck",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
+]
 
 [[package]]
 name = "const-oid"
@@ -412,6 +448,7 @@ version = "0.1.0"
 dependencies = [
  "assert_cmd",
  "clap",
+ "clifacet",
  "gh-meta-core",
  "predicates",
  "rstest",
