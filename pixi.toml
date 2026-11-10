@@ -33,6 +33,10 @@ pixi-sandbox = { version = "=0.9.0", channel = "https://prefix.dev/archont561/ar
 alint = "==0.22.0"
 gherlint = "==0.5.0"
 pytest-bdd = "==9.0.1"
+# `rude` is a linter, not a build tool: no conda package exists, so it is pinned
+# here the same way as the other PyPI-only tooling.
+rude = ">=0.1a4,<0.2"
+rude-clean-code = "==0.1.0"
 
 [feature.dev]
 platforms = ["linux-64"]
@@ -84,6 +88,7 @@ coverage = "sh -c 'mkdir -p coverage && cargo llvm-cov nextest --workspace --loc
 test-automation = "python -m pytest automation/tests"
 test-automation-cov = "python -m pytest automation/tests --cov=automation --cov-report=term-missing --cov-config=.coveragerc"
 lint-python = "ruff check dodo.py automation"
+rude-clean = "python automation/rude_clean.py"
 format-python-check = "ruff format --check dodo.py automation"
 typecheck = "mypy dodo.py automation"
 automation = "doit"
