@@ -1,0 +1,35 @@
+name: diag
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diag:
+    name: Render changelog
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+      - uses: prefix-dev/setup-pixi@ad1da6449d9e506fd127fd67ab2d054a769f6a94 # v0.11.2
+        with:
+          pixi-version: v0.83.0
+          cache: true
+          frozen: true
+      - name: render
+        continue-on-error: true
+        run: |
+          set +e
+          pixi run --frozen python automation/changelog.py print > /tmp/r.md 2>/dev/null
+          grep -v -E '^(✨|\.  |Task|Python Task)' /tmp/r.md > /tmp/clean.md
+          python3 - <<'PY'
+          import base64, pathlib
+          raw = pathlib.Path('/tmp/clean.md').read_bytes()
+          b64 = base64.b64encode(raw).decode()
+          print(f"::error title=BYTES::{len(raw)}")
+          for i in range(0, len(b64), 690):
+              print(f"::error title=C{i//690}::{b64[i:i+690]}")
+          PY
