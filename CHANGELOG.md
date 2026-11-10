@@ -22,6 +22,8 @@ file.
 
 ### Fixed
 
+* **automation:** run doit tasks from the repository root
+([5846271](https://github.com/Archont561/gh-repoconf/commit/5846271c6c8d766a7e843c61a40d5087c84839c4))
 * **ci:** point the coverage task at the moved registry
 ([4d662df](https://github.com/Archont561/gh-repoconf/commit/4d662df30188dfe66bdd2d64a7cd659e0d96af54))
 * **automation:** keep the registry importable from its new location
