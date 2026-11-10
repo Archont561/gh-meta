@@ -2,18 +2,11 @@
 
 from __future__ import annotations
 
-import sys
 from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
-# `doit -f automation/dodo.py` puts this file's directory on `sys.path`, so the
-# package-qualified imports below need the repository root added explicitly.
-_ROOT = Path(__file__).resolve().parent.parent
-if str(_ROOT) not in sys.path:
-    sys.path.insert(0, str(_ROOT))
-
-from automation import (  # noqa: E402
+from automation import (
     advisory_cache,
     audit_local,
     bump_version,
