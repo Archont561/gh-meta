@@ -28,4 +28,5 @@ __pycache__/
 # Generated check/editor scratch files
 /AGENTS.generated.md
 /.doit.db*
+/automation/.doit.db*
 .DS_Store
