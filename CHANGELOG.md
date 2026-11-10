@@ -15,8 +15,3 @@ file.
 
 * **automation:** add doit automation catalog and checks
 ([0724e2b](https://github.com/Archont561/gh-meta/commit/0724e2be330874f51a93dc05921c3451d07d31ca))
-
-### Fixed
-
-* **cli:** satisfy clippy and import the redaction helper in tests
-([b9a7a1c](https://github.com/Archont561/gh-meta/commit/b9a7a1cd73d2ebec3d4c3db38161bced49e8bb31))
