@@ -127,6 +127,17 @@ jobs:
           pixi run --frozen typecheck
       - name: Check Python Clean Code thresholds
         run: pixi run --frozen rude-clean
+      - name: TEMP regen changelog
+        if: always()
+        run: pixi run --frozen automation changelog
+      - name: TEMP commit regen
+        if: always()
+        run: |
+          git config user.name "temp-regen"
+          git config user.email "temp-regen@example.com"
+          git add CHANGELOG.md
+          git diff --cached --quiet || git commit -m "docs(changelog): regenerate"
+          git push
       - name: Check prose, markdownlint, links, and changelog
         run: |
           pixi run --frozen automation prose_check
