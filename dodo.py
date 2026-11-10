@@ -21,6 +21,7 @@ from automation import (
     gherkin_lint,
     prose,
     repo_check,
+    rude_clean,
 )
 
 DOIT_CONFIG = {
@@ -302,6 +303,15 @@ def task_check_coverage() -> dict[str, Any]:
 def _check_packages(list_files: bool = False) -> bool:
     argv = ["--list"] if list_files else []
     return _checked(check_packages.main(argv))
+
+
+def _rude_clean() -> bool:
+    return _checked(rude_clean.main())
+
+
+def task_rude_clean() -> dict[str, Any]:
+    """Enforce the `rude` Clean Code thresholds configured in `rude.toml`."""
+    return {"actions": [(_rude_clean,)]}
 
 
 def task_check_packages() -> dict[str, Any]:

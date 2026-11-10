@@ -36,6 +36,7 @@ def test_dodo_task_discovery_and_metadata() -> None:
         "prose_sync",
         "prose_write",
         "repo_check",
+        "rude_clean",
         "skills_check",
         "version_check",
     ]
