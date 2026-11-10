@@ -1,7 +1,8 @@
 //! Standalone CLI entrypoint library for `gh-meta`.
 //!
-//! At this initial scaffold stage, the CLI supports version and help queries
-//! backed by `gh-meta-core`.
+//! At this scaffold stage, the CLI supports version and help queries backed by
+//! `gh-meta-core`, plus the `clifacet` command seam that later interactive
+//! workflows build on (decision-2). No frontend feature is enabled yet.
 
 use std::ffi::OsString;
 
@@ -24,6 +25,22 @@ pub struct CliOutcome {
     pub stdout: String,
     /// Content written to standard error.
     pub stderr: String,
+}
+
+/// Render `value` the way `clifacet` renders a secret, for anywhere output is built.
+///
+/// Later commands take credentials (a GitHub token) as command input. `clifacet`'s
+/// `Secret` redacts itself in both `Display` and `Debug`, so routing a value through
+/// this function is what keeps it out of rendered output and test failure messages.
+///
+/// ```
+/// let token = gh_meta::redacted("ghp_live_value");
+/// assert_eq!(token, "[redacted]");
+/// assert!(!token.contains("ghp_live_value"));
+/// ```
+#[must_use]
+pub fn redacted(value: &str) -> String {
+    clifacet::secret::Secret::new(value.to_owned()).to_string()
 }
 
 fn build_cli() -> Command {
@@ -95,7 +112,7 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::{VERSION, run};
+    use super::{VERSION, redacted, run};
 
     #[test]
     fn version_matches_core_crate() {
@@ -122,6 +139,13 @@ mod tests {
         let sub = run(["gh-meta", "version"]);
         let flag = run(["gh-meta", "--version"]);
         assert_eq!(sub, flag);
+    }
+
+    #[test]
+    fn credentials_never_reach_rendered_output() {
+        let rendered = redacted("ghp_live_value");
+        assert_eq!(rendered, clifacet::secret::REDACTED);
+        assert!(!rendered.contains("ghp_live_value"));
     }
 
     #[test]

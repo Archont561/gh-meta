@@ -13,6 +13,9 @@ authors = ["Archont561 <142521648+Archont561@users.noreply.github.com>"]
 
 [workspace.dependencies]
 gh-meta-core = { path = "crates/gh-meta-core", version = "0.1.0" }
+# No frontend features are enabled: every one of them is an optional dependency
+# boundary (decision-2 item 1). This is the command seam and its failure type only.
+clifacet = { version = "0.5.0", default-features = false }
 clap = { version = "4.6", default-features = false, features = [
   "std",
   "help",
