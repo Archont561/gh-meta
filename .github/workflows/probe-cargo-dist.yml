@@ -1,0 +1,124 @@
+name: probe-cargo-dist
+
+# TEMPORARY. Two questions, answered by the tool instead of by assumption:
+#
+#   A. Does `cargo install cargo-dist` write the repository Cargo.lock?
+#   B. If a lockfile entry is the goal, what actually produces one?
+#
+# Deleted once the answers are recorded.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["arena/**"]
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    name: Probe cargo-dist against Cargo.lock
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Pixi
+        uses: prefix-dev/setup-pixi@ad1da6449d9e506fd127fd67ab2d054a769f6a94 # v0.11.2
+        with:
+          pixi-version: v0.83.0
+          cache: true
+          frozen: true
+
+      - name: Baseline
+        run: |
+          mkdir -p /tmp/probe
+          cp Cargo.lock /tmp/probe/Cargo.lock.before
+          sha256sum Cargo.lock > /tmp/probe/hash.before
+          cat /tmp/probe/hash.before
+          echo "cargo-lock-bytes=$(wc -c < Cargo.lock)"
+          echo "workspace-members=$(sed -n 's/^members = \[\(.*\)\]/\1/p' Cargo.toml)"
+
+      # ---- Question A: does install touch the repo lock ----------------------
+      - name: A1 — cargo install cargo-dist
+        shell: bash
+        run: |
+          set +e
+          pixi run --frozen cargo install cargo-dist --version 0.34.0 --locked \
+            > /tmp/probe/install.log 2>&1
+          echo "install_exit=$?"
+          tail -15 /tmp/probe/install.log
+          echo "--- binaries landed in the cargo prefix ---"
+          "$HOME/.cargo/bin/cargo-dist" --version 2>&1 || echo "(not in ~/.cargo/bin)"
+
+      - name: A2 — Cargo.lock difference after install
+        shell: bash
+        run: |
+          echo "=== sha256 now ==="
+          sha256sum Cargo.lock
+          echo "=== diff vs baseline ==="
+          if cmp -s Cargo.lock /tmp/probe/Cargo.lock.before; then
+            echo "IDENTICAL: cargo install did not write Cargo.lock"
+          else
+            echo "CHANGED:"
+            diff -u /tmp/probe/Cargo.lock.before Cargo.lock | head -80
+          fi
+          echo "=== is cargo-dist in the lock at all? ==="
+          grep -c 'name = "cargo-dist"' Cargo.lock || echo "0 entries"
+          echo "=== full working-tree status ==="
+          git status --porcelain
+          echo "(empty status above means zero tracked-file change)"
+
+      # ---- Question B: what DOES produce a lock entry ------------------------
+      # Runs after A2 so the A answer is already captured clean.
+      - name: B1 — cargo add cargo-dist (dev-dependency) — the contrasting case
+        shell: bash
+        run: |
+          set +e
+          pixi run --frozen cargo add cargo-dist --dev --locked \
+            > /tmp/probe/add.log 2>&1
+          echo "add_exit=$?"
+          tail -15 /tmp/probe/add.log
+          echo "=== diff produced by cargo add ==="
+          git diff --stat
+          echo "=== new lock entries ==="
+          git diff -- Cargo.lock | head -40
+
+      - name: Emit both patches
+        shell: bash
+        run: |
+          # Patch A = install only. Reconstruct it as empty-vs-changed from the copy.
+          if cmp -s Cargo.lock /tmp/probe/Cargo.lock.before; then
+            : > /tmp/probe/A-install.patch
+          else
+            diff -u /tmp/probe/Cargo.lock.before Cargo.lock > /tmp/probe/A-install.patch
+          fi
+          # Patch B = whatever cargo add changed.
+          git diff > /tmp/probe/B-add.patch
+          for f in A-install B-add; do
+            echo "::error title=${f}_BYTES::$(wc -c < /tmp/probe/$f.patch)"
+          done
+          python3 - <<'PY'
+          import base64, pathlib
+          for name in ("A-install", "B-add"):
+              p = pathlib.Path(f"/tmp/probe/{name}.patch")
+              if not p.stat().st_size:
+                  print(f"::error title={name}::EMPTY")
+                  continue
+              b64 = base64.b64encode(p.read_bytes()).decode()
+              for i in range(0, len(b64), 690):
+                  print(f"::error title={name}-{i//690}::{b64[i:i+690]}")
+          PY
+
+      - name: Upload patches
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: cargo-dist-probe
+          path: |
+            /tmp/probe/A-install.patch
+            /tmp/probe/B-add.patch
+            /tmp/probe/hash.before
+            /tmp/probe/install.log
+          if-no-files-found: warn
