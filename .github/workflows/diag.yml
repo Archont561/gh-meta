@@ -23,49 +23,23 @@ jobs:
           pixi-version: v0.83.0
           cache: true
           frozen: true
-      - name: convco check detail
+      - name: run every gate and report exits plus error lines
         continue-on-error: true
         run: |
           set +e
-          pixi run --frozen automation commit_range check > /tmp/cc.log 2>&1; echo "convco exit=$?"
-          i=0
-          while IFS= read -r line; do
-            i=$((i+1))
-            printf '::error title=CONVCO line=%s::%s\n' "$i" "$(printf '%s' "$line" | cut -c1-900)"
-          done <<< "$(grep -v '^$' /tmp/cc.log | tail -12)"
-      - name: fmt and clippy detail
-        continue-on-error: true
-        run: |
-          set +e
-          pixi run --frozen fmt-check > /tmp/fmt.log 2>&1; echo "fmt exit=$?"
-          i=0
-          while IFS= read -r line; do
-            i=$((i+1))
-            printf '::error title=FMT line=%s::%s\n' "$i" "$(printf '%s' "$line" | cut -c1-900)"
-          done <<< "$(grep -v '^$' /tmp/fmt.log | tail -30)"
-          pixi run --frozen clippy > /tmp/clippy.log 2>&1; echo "clippy exit=$?"
-          i=0
-          while IFS= read -r line; do
-            i=$((i+1))
-            printf '::error title=CLIPPY line=%s::%s\n' "$i" "$(printf '%s' "$line" | cut -c1-900)"
-          done <<< "$(grep -v '^$' /tmp/clippy.log | tail -40)"
-      - name: nextest detail
-        continue-on-error: true
-        run: |
-          set +e
-          pixi run --frozen test > /tmp/test.log 2>&1; echo "nextest exit=$?"
-          i=0
-          while IFS= read -r line; do
-            i=$((i+1))
-            printf '::error title=NEXTEST line=%s::%s\n' "$i" "$(printf '%s' "$line" | cut -c1-900)"
-          done <<< "$(grep -v '^$' /tmp/test.log | tail -40)"
-      - name: doctest detail
-        continue-on-error: true
-        run: |
-          set +e
-          pixi run --frozen test-doc > /tmp/doc.log 2>&1; echo "doctest exit=$?"
-          i=0
-          while IFS= read -r line; do
-            i=$((i+1))
-            printf '::error title=DOCTEST line=%s::%s\n' "$i" "$(printf '%s' "$line" | cut -c1-900)"
-          done <<< "$(grep -v '^$' /tmp/doc.log | tail -40)"
+          report() {
+            name=$1; shift
+            "$@" > "/tmp/$name.log" 2>&1
+            code=$?
+            printf '::error title=EXIT %s=%s::done\n' "$name" "$code"
+            i=0
+            while IFS= read -r line; do
+              i=$((i+1))
+              printf '::error title=%s line=%s::%s\n' "$name" "$i" "$(printf '%s' "$line" | cut -c1-900)"
+            done <<< "$(grep -E 'error(\[|:)|^error|failures:|panicked|^\s+-->|FAILED|would reformat|assertion' "/tmp/$name.log" | head -25)"
+          }
+          report convco pixi run --frozen automation commit_range check
+          report fmt pixi run --frozen fmt-check
+          report clippy pixi run --frozen clippy
+          report nextest pixi run --frozen test
+          report coverage pixi run --frozen coverage
