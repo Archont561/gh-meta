@@ -1,7 +1,8 @@
 # Contributing to gh-meta
 
-`gh-meta` is an early version-only scaffold for managing `.github/`
-configuration as code. Read the specification and ADRs under
+`gh-meta` is an early scaffold for managing `.github/` configuration as code.
+The `clifacet` command seam is wired with no frontend enabled; domain commands
+have not landed yet. Read the specification and ADRs under
 [backlog/](backlog/README.md) before proposing new features, and avoid
 presenting planned capabilities as implemented.
 
