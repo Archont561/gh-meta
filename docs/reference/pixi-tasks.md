@@ -1,7 +1,7 @@
 # Pixi tasks reference
 
 Core environment, Rust, Bun, and packaging tasks live in `pixi.toml`. Python
-repository automation tasks are consolidated under `dodo.py` and invoked
+repository automation tasks are consolidated under `automation/dodo.py` and invoked
 through `pixi run automation <task>` (`doit`).
 
 ## Pixi tasks
@@ -14,15 +14,15 @@ through `pixi run automation <task>` (`doit`).
 | `agents-md` | Refresh marked sections of `AGENTS.md` |
 | `backlog` | Run `backlog.md` CLI |
 | `skills` | Run `skills` CLI |
-| `automation` | Run `doit` tasks registered in `dodo.py` (`pixi run automation list`) |
+| `automation` | Run `doit -f automation/dodo.py` tasks (`pixi run automation list`) |
 | `fmt` / `fmt-check` | Format or verify Rust code via `cargo fmt` |
 | `clippy` | Run Clippy over all workspace targets with `-D warnings` |
 | `test` / `test-doc` / `test-all` | Run `cargo nextest` BDD/unit suites and Rust doctests |
 | `coverage` | Generate Rust LCOV report and run `doit check_coverage` (90% threshold) |
 | `build-release` | Compile `target/release/gh-repoconf` with `--locked` |
-| `lint-python` / `format-python-check` | Check `dodo.py` and `automation/` with `ruff` |
-| `rude-clean` | Check Clean Code thresholds in `dodo.py` and `automation/` with `rude` |
-| `typecheck` | Type-check `dodo.py` and `automation/` with `mypy` |
+| `lint-python` / `format-python-check` | Check `automation/` with `ruff` |
+| `rude-clean` | Check Clean Code thresholds in `automation/` with `rude` |
+| `typecheck` | Type-check `automation/` with `mypy` |
 | `test-automation` / `test-automation-cov` | Run Python `pytest-bdd` and unit test suites |
 | `alint` | Check `.alint.yml` repository structural rules |
 | `docs-lint` | Lint Markdown with `markdownlint-cli2` |
@@ -38,7 +38,7 @@ through `pixi run automation <task>` (`doit`).
 
 | Task | Purpose |
 | --- | --- |
-| `list` | List all discovered `task_*` commands from `dodo.py` |
+| `list` | List all discovered `task_*` commands from `automation/dodo.py` |
 | `check_policy` | Run all read-only Python policy, packaging, prose, and changelog checks |
 | `repo_check` | Check cross-file license, symlink, and sandbox parity |
 | `version_check` / `bump_version` | Verify or bump synchronized manifest versions |

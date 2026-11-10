@@ -16,7 +16,7 @@
 ├── docs/                  # Canonical user and developer documentation
 ├── scripts/               # Shell setup and sandbox restore scripts (`restore.sh`, `bootstrap.sh`, `install_hooks.sh`)
 ├── Cargo.toml             # Root Cargo workspace manifest
-├── dodo.py                # Unified doit automation task registry (`pixi run automation`)
+├── automation/dodo.py     # Unified doit automation task registry (`pixi run automation`)
 ├── pixi.toml              # Locked Pixi workspace and task definitions
 ├── pixi-sandbox.toml      # Sandbox publication policy
 ├── package.json           # Developer Bun CLI manifest

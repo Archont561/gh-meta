@@ -88,9 +88,9 @@ rules:
 
   - id: require-dodo-py
     kind: file_exists
-    paths: dodo.py
+    paths: automation/dodo.py
     level: error
-    message: Required dodo.py task registry is missing.
+    message: Required automation/dodo.py task registry is missing.
 
   - id: require-automation-package
     kind: file_exists
@@ -192,7 +192,7 @@ rules:
     kind: file_absent
     paths: pyproject.toml
     level: error
-    message: Root pyproject.toml is forbidden; repository automation lives in dodo.py and automation/.
+    message: Root pyproject.toml is forbidden; repository automation lives in automation/dodo.py.
 
   - id: forbid-root-recipe
     kind: dir_absent

@@ -14,7 +14,7 @@ before full `.github/` configuration synchronization features land.
   `[redacted]`.
 - `crates/gh-repoconf/recipe/recipe.yaml` packages the standalone `gh-repoconf` binary
   into a Conda artifact and tests `gh-repoconf --version` and `gh-repoconf --help`.
-- `automation/` and `dodo.py` deliver workspace version checking
+- `automation/` and `automation/dodo.py` deliver workspace version checking
   (`bump_version.py`), prose config rendering (`prose.py`), Gherkin linting
   (`gherkin_lint.py`), unified `doit` task execution (`pixi run automation`),
   and Python `pytest-bdd` acceptance specs under `automation/features/`.

@@ -10,10 +10,10 @@
 2. **`crates/gh-repoconf`** — standalone CLI binary (`gh-repoconf`), `gh` CLI
    extension entrypoint, PyPI (`maturin`) manifest, and `rattler-build` Conda
    packaging recipe under `crates/gh-repoconf/recipe/`.
-3. **`automation/` and `dodo.py`** — Python automation modules, shared helpers
+3. **`automation/`** — Python automation modules, the `automation/dodo.py` task registry,
    under `automation/lib/`, `pytest-bdd` BDD suite under
    `automation/{features,tests}/`, and unified `doit` CLI task registry in
-   `dodo.py`.
+   `automation/dodo.py`.
 4. **`scripts/`** — shell setup and sandbox restore launchers (`restore.sh`,
    `bootstrap.sh`, `install_hooks.sh`).
 

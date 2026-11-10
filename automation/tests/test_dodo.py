@@ -1,4 +1,4 @@
-"""Tests verifying doit task discovery, contracts, and adapter helpers in dodo.py."""
+"""Tests verifying doit task discovery, contracts, and adapter helpers in automation/dodo.py."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ import pytest
 from doit.cmd_base import ModuleTaskLoader
 from doit.task import dict_to_task
 
-import dodo
+from automation import dodo
 
 ROOT = Path(__file__).resolve().parents[2]
 

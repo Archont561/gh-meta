@@ -24,7 +24,7 @@ def target_paths(root: Path = ROOT) -> list[str]:
     Test functions are long by design, so the policy does not cover them; see
     the scope note in ``rude.toml``.
     """
-    candidates = [root / "dodo.py", *(root / "automation").glob("*.py")]
+    candidates = [*(root / "automation").glob("*.py")]
     return [str(path) for path in sorted(candidates) if path.is_file()]
 
 

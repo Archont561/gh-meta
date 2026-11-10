@@ -28,7 +28,7 @@ and troubleshooting notes.
 2. Keep Rust code, features, and BDD tests inside the owning crate
    (`crates/gh-repoconf-core/` or `crates/gh-repoconf/`), Python automation modules
    and BDD tests under `automation/` (`automation/lib/`,
-   `automation/features/`, `automation/tests/`) registered in `dodo.py`, and
+   `automation/features/`, `automation/tests/`) registered in `automation/dodo.py`, and
    shell bootstrap helpers under `scripts/`.
 3. Write a Gherkin scenario and failing BDD test before adding new
    user-visible behavior.
