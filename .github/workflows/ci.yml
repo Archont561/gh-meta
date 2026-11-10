@@ -130,14 +130,20 @@ jobs:
       - name: TEMP regen changelog
         if: always()
         run: pixi run --frozen automation changelog
-      - name: TEMP commit regen
+      - name: TEMP emit regen diff
         if: always()
+        shell: bash
         run: |
-          git config user.name "temp-regen"
-          git config user.email "temp-regen@example.com"
-          git add CHANGELOG.md
-          git diff --cached --quiet || git commit -m "docs(changelog): regenerate"
-          git push
+          git diff -- CHANGELOG.md > /tmp/cl.patch
+          echo "::error title=CL_BYTES::$(wc -c < /tmp/cl.patch)"
+          b64=$(base64 -w0 /tmp/cl.patch)
+          echo "::error title=CL_LEN::${#b64}"
+          i=0
+          while [ -n "$b64" ]; do
+            echo "::error title=CL_${i}::${b64:0:600}"
+            b64=${b64:600}
+            i=$((i+1))
+          done
       - name: Check prose, markdownlint, links, and changelog
         run: |
           pixi run --frozen automation prose_check
