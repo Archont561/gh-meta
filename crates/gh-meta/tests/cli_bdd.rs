@@ -110,7 +110,7 @@ fn given_token_value(world: &mut CliWorld, token: String) {
 
 #[when("it is rendered through the clifacet seam")]
 fn render_through_seam(world: &mut CliWorld) {
-    world.rendered = gh_meta::redacted(world.token.clone());
+    world.rendered = gh_meta::redacted(&world.token);
 }
 
 #[then("the rendered value equals \"{expected}\"")]

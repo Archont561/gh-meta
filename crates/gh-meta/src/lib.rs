@@ -34,13 +34,13 @@ pub struct CliOutcome {
 /// this function is what keeps it out of rendered output and test failure messages.
 ///
 /// ```
-/// let token = gh_meta::redacted(String::from("ghp_live_value"));
+/// let token = gh_meta::redacted("ghp_live_value");
 /// assert_eq!(token, "[redacted]");
 /// assert!(!token.contains("ghp_live_value"));
 /// ```
 #[must_use]
-pub fn redacted<T: ToString>(value: T) -> String {
-    clifacet::secret::Secret::new(value.to_string()).to_string()
+pub fn redacted(value: &str) -> String {
+    clifacet::secret::Secret::new(value.to_owned()).to_string()
 }
 
 fn build_cli() -> Command {
@@ -112,7 +112,7 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::{VERSION, run};
+    use super::{VERSION, redacted, run};
 
     #[test]
     fn version_matches_core_crate() {
@@ -143,7 +143,7 @@ mod tests {
 
     #[test]
     fn credentials_never_reach_rendered_output() {
-        let rendered = redacted(String::from("ghp_live_value"));
+        let rendered = redacted("ghp_live_value");
         assert_eq!(rendered, clifacet::secret::REDACTED);
         assert!(!rendered.contains("ghp_live_value"));
     }
