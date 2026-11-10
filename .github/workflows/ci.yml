@@ -125,6 +125,8 @@ jobs:
           pixi run --frozen lint-python
           pixi run --frozen format-python-check
           pixi run --frozen typecheck
+      - name: Check Python Clean Code thresholds
+        run: pixi run --frozen rude-clean
       - name: Check prose, markdownlint, links, and changelog
         run: |
           pixi run --frozen automation prose_check

@@ -14,8 +14,8 @@ pre-commit:
       run: pixi run --frozen --no-install clippy
 
     - name: python-lint
-      glob: ["dodo.py", "automation/**/*.py"]
-      run: pixi run --frozen --no-install lint-python && pixi run --frozen --no-install format-python-check && pixi run --frozen --no-install typecheck
+      glob: ["dodo.py", "automation/**/*.py", "rude.toml"]
+      run: pixi run --frozen --no-install lint-python && pixi run --frozen --no-install rude-clean && pixi run --frozen --no-install format-python-check && pixi run --frozen --no-install typecheck
 
     - name: gherkin
       glob: "**/*.feature"
