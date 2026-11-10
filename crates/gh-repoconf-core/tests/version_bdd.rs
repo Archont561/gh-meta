@@ -1,4 +1,4 @@
-use gh_meta_core::{VERSION, format_version_banner};
+use gh_repoconf_core::{VERSION, format_version_banner};
 use rstest::fixture;
 use rstest_bdd_macros::{given, scenario, then, when};
 

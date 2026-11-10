@@ -75,7 +75,7 @@ def test_repo_invariants_and_failures(tmp_path: Path) -> None:
 
 def test_change_scope_and_commit_range(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     assert change_scope.documentation_only(["README.md", "docs/README.md", "LICENSE"])
-    assert not change_scope.documentation_only(["README.md", "crates/gh-meta/src/lib.rs"])
+    assert not change_scope.documentation_only(["README.md", "crates/gh-repoconf/src/lib.rs"])
     assert not change_scope.documentation_only([])
     assert change_scope.changed_paths("", lambda _cmd: (0, ""))[0] is None
     assert change_scope.changed_paths("a..b", lambda _cmd: (0, "README.md\0"))[0] == ["README.md"]
@@ -100,7 +100,9 @@ def test_change_scope_and_commit_range(tmp_path: Path, monkeypatch: pytest.Monke
     assert change_scope.main([], env=env, git=lambda _cmd: (0, "docs/README.md\0")) == 0
     assert "docs-only=true" in out.read_text(encoding="utf-8")
     assert "Documentation only" in summary.read_text(encoding="utf-8")
-    assert change_scope.main([], env=env, git=lambda _cmd: (0, "crates/gh-meta/src/lib.rs\0")) == 0
+    assert (
+        change_scope.main([], env=env, git=lambda _cmd: (0, "crates/gh-repoconf/src/lib.rs\0")) == 0
+    )
     assert change_scope.main([], env={}, git=lambda _cmd: (0, "")) == 0
 
     assert commit_range.main(["resolve"], env=env) == 0
@@ -121,39 +123,39 @@ def test_change_scope_and_commit_range(tmp_path: Path, monkeypatch: pytest.Monke
 
 
 def test_check_packages_metadata_and_contents(tmp_path: Path) -> None:
-    missing = check_packages.contents("gh-meta", ["Cargo.toml", "src/lib.rs"])
+    missing = check_packages.contents("gh-repoconf", ["Cargo.toml", "src/lib.rs"])
     assert any(item.kind == "missing-file" for item in missing)
 
     forbidden = check_packages.contents(
-        "gh-meta",
+        "gh-repoconf",
         ["Cargo.toml", "README.md", "LICENSE", "src/lib.rs", "features/cli.feature"],
     )
     assert any(item.kind == "forbidden-file" for item in forbidden)
 
     forbidden_py = check_packages.contents(
-        "gh-meta",
+        "gh-repoconf",
         ["Cargo.toml", "README.md", "LICENSE", "src/lib.rs", "pyproject.toml"],
     )
     assert any(item.kind == "forbidden-file" for item in forbidden_py)
 
     forbidden_recipe = check_packages.contents(
-        "gh-meta",
+        "gh-repoconf",
         ["Cargo.toml", "README.md", "LICENSE", "src/lib.rs", "recipe/recipe.yaml"],
     )
     assert any(item.kind == "forbidden-file" for item in forbidden_recipe)
 
     assert check_packages.packaging_configs(ROOT) == []
     bad_root = tmp_path / "bad_pkg"
-    (bad_root / "crates" / "gh-meta").mkdir(parents=True)
-    (bad_root / "crates" / "gh-meta" / "Cargo.toml").write_text(
-        '[package]\nname = "gh-meta"\n',
+    (bad_root / "crates" / "gh-repoconf").mkdir(parents=True)
+    (bad_root / "crates" / "gh-repoconf" / "Cargo.toml").write_text(
+        '[package]\nname = "gh-repoconf"\n',
         encoding="utf-8",
     )
     bad_findings = check_packages.packaging_configs(bad_root)
     assert any(item.kind == "invalid-npm-metadata" for item in bad_findings)
     assert any(item.kind == "missing-pypi-manifest" for item in bad_findings)
 
-    (bad_root / "crates" / "gh-meta" / "pyproject.toml").write_text(
+    (bad_root / "crates" / "gh-repoconf" / "pyproject.toml").write_text(
         '[project]\nname = "wrong"\ndynamic = []\nlicense = "Apache-2.0"\n'
         '[tool.maturin]\nbindings = "pyo3"\nlocked = false\n',
         encoding="utf-8",
@@ -162,17 +164,17 @@ def test_check_packages_metadata_and_contents(tmp_path: Path) -> None:
     assert sum(1 for item in bad_py_findings if item.kind == "invalid-pypi-manifest") == 5
 
     assert (
-        check_packages.contents("gh-meta", ["Cargo.toml", "README.md", "LICENSE", "src/lib.rs"])
+        check_packages.contents("gh-repoconf", ["Cargo.toml", "README.md", "LICENSE", "src/lib.rs"])
         == []
     )
     assert check_packages.metadata(
-        "gh-meta",
+        "gh-repoconf",
         {"description": {"workspace": True}, "license": {"workspace": True}},
         {"license": "MIT"},
     )
     assert (
         check_packages.metadata(
-            "gh-meta",
+            "gh-repoconf",
             {
                 "description": {"workspace": True},
                 "rust-version": {"workspace": True},
@@ -205,8 +207,8 @@ def test_check_packages_metadata_and_contents(tmp_path: Path) -> None:
 def test_coverage_normalization_and_threshold(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    core_src = ROOT / "crates" / "gh-meta-core" / "src" / "lib.rs"
-    cli_src = ROOT / "crates" / "gh-meta" / "src" / "lib.rs"
+    core_src = ROOT / "crates" / "gh-repoconf-core" / "src" / "lib.rs"
+    cli_src = ROOT / "crates" / "gh-repoconf" / "src" / "lib.rs"
     sample = (
         f"SF:{core_src}\nDA:1,1\nDA:2,1\nLF:0\nLH:0\nend_of_record\n"
         f"SF:{cli_src}\nDA:1,1\nDA:2,0\nDA:3,1\nDA:4,1\nDA:5,1\nDA:6,1\n"
@@ -295,7 +297,7 @@ def test_advisory_cache_and_exception(tmp_path: Path) -> None:
     with pytest.raises(ValueError, match="cannot read"):
         check_advisory_exception.load_lock(tmp_path / "Cargo.lock")
     (tmp_path / "Cargo.lock").write_text(
-        '[[package]]\nname = "gh-meta"\nversion = "0.1.0"\n',
+        '[[package]]\nname = "gh-repoconf"\nversion = "0.1.0"\n',
         encoding="utf-8",
     )
     (tmp_path / ".cargo").mkdir(exist_ok=True)

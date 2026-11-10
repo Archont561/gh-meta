@@ -125,6 +125,8 @@ jobs:
           pixi run --frozen lint-python
           pixi run --frozen format-python-check
           pixi run --frozen typecheck
+      - name: Check Python Clean Code thresholds
+        run: pixi run --frozen rude-clean
       - name: Check prose, markdownlint, links, and changelog
         run: |
           pixi run --frozen automation prose_check
@@ -179,7 +181,7 @@ jobs:
       - name: Build standalone release binary
         run: pixi run --frozen build-release
       - name: Smoke-test standalone release binary
-        run: target/release/gh-meta --version
+        run: target/release/gh-repoconf --version
       - name: Upload source coverage to Codecov
         if: env.CODECOV_TOKEN != ''
         uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1

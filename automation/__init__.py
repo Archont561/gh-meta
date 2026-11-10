@@ -1,1 +1,1 @@
-"""Repository automation, validation, and release toolkit for gh-meta."""
+"""Repository automation, validation, and release toolkit for gh-repoconf."""

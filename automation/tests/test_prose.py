@@ -69,8 +69,8 @@ def test_disabled_rule_without_reason_is_refused(tmp_path: Path) -> None:
 
 def test_vocabulary_contains_project_terms_without_duplicates(config: dict) -> None:
     accept = config["accept"]
-    assert "gh-meta" in accept
-    assert "gh-meta-core" in accept
+    assert "gh-repoconf" in accept
+    assert "gh-repoconf-core" in accept
     assert len(accept) == len(set(accept))
 
 

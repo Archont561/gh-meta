@@ -3,7 +3,7 @@ requires = ["maturin>=1.16,<2.0"]
 build-backend = "maturin"
 
 [project]
-name = "gh-meta"
+name = "gh-repoconf"
 requires-python = ">=3.9"
 description = "Your .github/ directory, managed as code (standalone CLI and gh extension)"
 readme = { file = "README.md", content-type = "text/markdown" }
@@ -23,9 +23,9 @@ classifiers = [
 dynamic = ["version"]
 
 [project.urls]
-Homepage = "https://github.com/Archont561/gh-meta"
-Repository = "https://github.com/Archont561/gh-meta"
-Issues = "https://github.com/Archont561/gh-meta/issues"
+Homepage = "https://github.com/Archont561/gh-repoconf"
+Repository = "https://github.com/Archont561/gh-repoconf"
+Issues = "https://github.com/Archont561/gh-repoconf/issues"
 
 [tool.maturin]
 bindings = "bin"

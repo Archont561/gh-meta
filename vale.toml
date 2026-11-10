@@ -1,5 +1,5 @@
 # The prose check's source of truth: what Vale runs, and the house style this repository owns.
-# `pixi run automation prose_sync` renders `.vale.ini` and `.vale/styles/GhMeta/` from this file.
+# `pixi run automation prose_sync` renders `.vale.ini` and `.vale/styles/GhRepoconf/` from this file.
 
 min_alert_level = "warning"
 
@@ -12,8 +12,8 @@ packages = [
 
 accept = [
   # The project and its crates.
-  "gh-meta",
-  "gh-meta-core",
+  "gh-repoconf",
+  "gh-repoconf-core",
   "clifacet",
   "alint",
   "gherlint",
@@ -74,8 +74,8 @@ accept = [
   "yml",
 ]
 
-vocab = "GhMeta"
-based_on = ["Vale", "Microsoft", "write-good", "GhMeta"]
+vocab = "GhRepoconf"
+based_on = ["Vale", "Microsoft", "write-good", "GhRepoconf"]
 
 [rules."Microsoft.Dashes"]
 level = "NO"
@@ -145,13 +145,13 @@ reason = "Qualifiers express deliberate scope exceptions honestly."
 level = "NO"
 reason = "Tool names appear in both prose and command spans with deliberate case."
 
-[rules."GhMeta.American"]
+[rules."GhRepoconf.American"]
 extends = "substitution"
 level = "error"
 message = "Use '%s' instead of '%s'."
 ignorecase = true
 
-[rules."GhMeta.American".swap]
+[rules."GhRepoconf.American".swap]
 "behaviour" = "behavior"
 "normalis(e|ed|es|ing)" = "normaliz$1"
 "serialis(e|ed|es|ing)" = "serializ$1"

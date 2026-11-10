@@ -1,10 +1,10 @@
-//! Binary entrypoint for `gh-meta`.
+//! Binary entrypoint for `gh-repoconf`.
 
 use std::io::{self, Write};
 use std::process::ExitCode;
 
 fn main() -> ExitCode {
-    let outcome = gh_meta::run(std::env::args_os());
+    let outcome = gh_repoconf::run(std::env::args_os());
     if !outcome.stdout.is_empty() {
         let _ = io::stdout().write_all(outcome.stdout.as_bytes());
     }

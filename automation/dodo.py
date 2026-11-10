@@ -1,4 +1,4 @@
-"""Central doit task registry consolidating gh-meta repository automation."""
+"""Central doit task registry consolidating gh-repoconf repository automation."""
 
 from __future__ import annotations
 
@@ -21,6 +21,7 @@ from automation import (
     gherkin_lint,
     prose,
     repo_check,
+    rude_clean,
 )
 
 DOIT_CONFIG = {
@@ -304,6 +305,15 @@ def _check_packages(list_files: bool = False) -> bool:
     return _checked(check_packages.main(argv))
 
 
+def _rude_clean() -> bool:
+    return _checked(rude_clean.main())
+
+
+def task_rude_clean() -> dict[str, Any]:
+    """Enforce the `rude` Clean Code thresholds configured in `rude.toml`."""
+    return {"actions": [(_rude_clean,)]}
+
+
 def task_check_packages() -> dict[str, Any]:
     """Verify crate package listings and registry packaging metadata."""
     return {
@@ -368,14 +378,14 @@ def _prose_write() -> bool:
 
 
 def task_prose_write() -> dict[str, Any]:
-    """Render .vale.ini and GhMeta Vale styles incrementally from vale.toml."""
+    """Render .vale.ini and GhRepoconf Vale styles incrementally from vale.toml."""
     return {
         "actions": [_prose_write],
         "file_dep": ["vale.toml", "automation/prose.py"],
         "targets": [
             ".vale.ini",
-            str(Path(".vale/styles/config/vocabularies/GhMeta/accept.txt")),
-            str(Path(".vale/styles/GhMeta/American.yml")),
+            str(Path(".vale/styles/config/vocabularies/GhRepoconf/accept.txt")),
+            str(Path(".vale/styles/GhRepoconf/American.yml")),
         ],
     }
 

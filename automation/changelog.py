@@ -20,7 +20,7 @@ from automation.lib.git import is_shallow_repository  # noqa: E402
 
 CHANGELOG = "CHANGELOG.md"
 _OWNER = "Archont561"
-_REPOSITORY = "gh-meta"
+_REPOSITORY = "gh-repoconf"
 
 Output = Callable[[Sequence[str]], tuple[int, str]]
 

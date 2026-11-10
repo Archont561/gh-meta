@@ -1,4 +1,4 @@
-project_name: "gh-meta"
+project_name: "gh-repoconf"
 default_status: "To Do"
 statuses: ["To Do", "In Progress", "Done"]
 labels: ["scaffold", "cli", "packaging", "docs", "ui"]
@@ -12,4 +12,4 @@ zero_padded_ids: 3
 bypass_git_hooks: false
 check_active_branches: false
 active_branch_days: 30
-task_prefix: "ghm"
+task_prefix: "rep"

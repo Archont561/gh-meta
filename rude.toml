@@ -1,0 +1,43 @@
+# Lint policy for `rude` (https://docs.rude.dev) and its Clean Code plugin.
+#
+# `ruff` already owns correctness and style for the Python automation: `ruff.toml`
+# selects E, F, W, B, UP, I and PTH. This file deliberately enables *only* the
+# Clean Code thresholds, which ruff does not model, so the two linters never
+# report the same defect twice.
+#
+# Scope is hand-written automation source. `automation/tests` is excluded: test
+# functions are long by nature (assertion sequences that are clearer inline than
+# split into helpers), and enforcing design thresholds there would push us toward
+# less readable tests.
+#
+# Thresholds are set to the repo's current worst case, so this gate ratchets from
+# here and cannot regress. They are not targets — lower them as the code shrinks.
+
+[tool.rude]
+# Only the Clean Code plugin rules. `E`, `F`, `W`, `C` (McCabe) and the class
+# rules CC201/CC202 are excluded on purpose: `ruff` covers the first three and
+# C901, and no class in `automation` is near the CC201/CC202 defaults.
+ignore = ["E", "W", "F", "C", "CC201", "CC202", "CC301", "CC302"]
+# Dependency declared in `pixi.toml`; entry points are also auto-discovered, but
+# naming it makes the dependency real rather than incidental.
+plugins = ["rude_clean_code"]
+
+[tool.rude.rules.CC101]
+# Longest function today: `bump_version.main` at 57 lines (default 30).
+max_lines = 60
+
+[tool.rude.rules.CC102]
+# Longest parameter list today: `dodo._bump_version` at 6 (default 5).
+max_parameters = 6
+
+[tool.rude.rules.CC103]
+# Most return statements today: `prose.main` at 8 (default 5).
+max_returns = 8
+
+[tool.rude.rules.CC104]
+# Most locals today: `changelog.render` at 20 (default 10).
+max_locals = 20
+
+[tool.rude.rules.CC303]
+# Most branches today: `changelog.render` at 20 (default 10).
+max_branches = 20

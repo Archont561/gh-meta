@@ -1,5 +1,5 @@
-gh-meta
-gh-meta-core
+gh-repoconf
+gh-repoconf-core
 clifacet
 alint
 gherlint

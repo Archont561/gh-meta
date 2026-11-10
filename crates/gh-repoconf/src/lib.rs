@@ -1,7 +1,7 @@
-//! Standalone CLI entrypoint library for `gh-meta`.
+//! Standalone CLI entrypoint library for `gh-repoconf`.
 //!
 //! At this scaffold stage, the CLI supports version and help queries backed by
-//! `gh-meta-core`, plus the `clifacet` command seam that later interactive
+//! `gh-repoconf-core`, plus the `clifacet` command seam that later interactive
 //! workflows build on (decision-2). No frontend feature is enabled yet.
 
 use std::ffi::OsString;
@@ -12,7 +12,7 @@ use clap::{Arg, ArgAction, Command};
 /// Crate version read from `CARGO_PKG_VERSION` at compile time.
 ///
 /// ```
-/// assert_eq!(gh_meta::VERSION, gh_meta_core::VERSION);
+/// assert_eq!(gh_repoconf::VERSION, gh_repoconf_core::VERSION);
 /// ```
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
@@ -34,7 +34,7 @@ pub struct CliOutcome {
 /// this function is what keeps it out of rendered output and test failure messages.
 ///
 /// ```
-/// let token = gh_meta::redacted("ghp_live_value");
+/// let token = gh_repoconf::redacted("ghp_live_value");
 /// assert_eq!(token, "[redacted]");
 /// assert!(!token.contains("ghp_live_value"));
 /// ```
@@ -44,7 +44,7 @@ pub fn redacted(value: &str) -> String {
 }
 
 fn build_cli() -> Command {
-    Command::new("gh-meta")
+    Command::new("gh-repoconf")
         .about("Your .github/ directory, managed as code.")
         .version(VERSION)
         .disable_version_flag(true)
@@ -61,9 +61,9 @@ fn build_cli() -> Command {
 /// Parse arguments and produce the CLI stdout, stderr, and exit code without exiting the process.
 ///
 /// ```
-/// let outcome = gh_meta::run(["gh-meta", "--version"]);
+/// let outcome = gh_repoconf::run(["gh-repoconf", "--version"]);
 /// assert_eq!(outcome.exit_code, 0);
-/// assert_eq!(outcome.stdout.trim(), format!("gh-meta {}", gh_meta::VERSION));
+/// assert_eq!(outcome.stdout.trim(), format!("gh-repoconf {}", gh_repoconf::VERSION));
 /// ```
 #[must_use]
 pub fn run<I, T>(args: I) -> CliOutcome
@@ -77,7 +77,10 @@ where
             if matches.get_flag("version") || matches.subcommand_name() == Some("version") {
                 return CliOutcome {
                     exit_code: 0,
-                    stdout: format!("{}\n", gh_meta_core::format_version_banner("gh-meta")),
+                    stdout: format!(
+                        "{}\n",
+                        gh_repoconf_core::format_version_banner("gh-repoconf")
+                    ),
                     stderr: String::new(),
                 };
             }
@@ -116,28 +119,28 @@ mod tests {
 
     #[test]
     fn version_matches_core_crate() {
-        assert_eq!(VERSION, gh_meta_core::VERSION);
+        assert_eq!(VERSION, gh_repoconf_core::VERSION);
     }
 
     #[test]
     fn bare_invocation_renders_help_cleanly() {
-        let outcome = run(["gh-meta"]);
+        let outcome = run(["gh-repoconf"]);
         assert_eq!(outcome.exit_code, 0);
-        assert!(outcome.stdout.contains("Usage: gh-meta"));
+        assert!(outcome.stdout.contains("Usage: gh-repoconf"));
         assert_eq!(outcome.stderr, "");
     }
 
     #[test]
     fn help_flag_exits_zero() {
-        let outcome = run(["gh-meta", "--help"]);
+        let outcome = run(["gh-repoconf", "--help"]);
         assert_eq!(outcome.exit_code, 0);
-        assert!(outcome.stdout.contains("Usage: gh-meta"));
+        assert!(outcome.stdout.contains("Usage: gh-repoconf"));
     }
 
     #[test]
     fn version_subcommand_matches_flag() {
-        let sub = run(["gh-meta", "version"]);
-        let flag = run(["gh-meta", "--version"]);
+        let sub = run(["gh-repoconf", "version"]);
+        let flag = run(["gh-repoconf", "--version"]);
         assert_eq!(sub, flag);
     }
 
@@ -150,7 +153,7 @@ mod tests {
 
     #[test]
     fn unknown_flag_exits_two_on_stderr() {
-        let outcome = run(["gh-meta", "--not-a-flag"]);
+        let outcome = run(["gh-repoconf", "--not-a-flag"]);
         assert_eq!(outcome.exit_code, 2);
         assert_eq!(outcome.stdout, "");
         assert_ne!(outcome.stderr, "");

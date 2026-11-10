@@ -1,6 +1,6 @@
-# gh-meta-core
+# gh-repoconf-core
 
-Core library crate for [`gh-meta`](https://github.com/Archont561/gh-meta).
+Core library crate for [`gh-repoconf`](https://github.com/Archont561/gh-repoconf).
 
 At this stage the crate is an intentional version-only scaffold exporting
 `VERSION` from `Cargo.toml` metadata and deterministic version banner

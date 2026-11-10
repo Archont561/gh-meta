@@ -5,7 +5,7 @@ Feature: Workspace version synchronization tool
   version from the root manifest.
 
   Scenario: Live repository manifests match the workspace version
-    Given the live gh-meta repository workspace
+    Given the live gh-repoconf repository workspace
     When the version checker inspects all workspace manifests
     Then the version check exits with code 0
     And all manifest version sites record the same version
@@ -15,11 +15,11 @@ Feature: Workspace version synchronization tool
     And the temporary Conda recipe context version is changed to "0.9.9"
     When the version checker inspects the temporary workspace
     Then the version check exits with code 1
-    And the version checker reports drift in "crates/gh-meta/recipe/recipe.yaml"
+    And the version checker reports drift in "crates/gh-repoconf/recipe/recipe.yaml"
 
   Scenario: Refuse a workspace crate that pins its own version
     Given a temporary workspace at version "0.1.0"
-    And crate "gh-meta" pins explicit version "0.1.0" instead of inheriting
+    And crate "gh-repoconf" pins explicit version "0.1.0" instead of inheriting
     When the version checker inspects the temporary workspace
     Then the version check exits with code 1
     And the version checker reports an explicit crate version pin

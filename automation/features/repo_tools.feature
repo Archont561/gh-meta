@@ -5,7 +5,7 @@ Feature: Repository automation and policy tools
   rendering, and safe offline security checks.
 
   Scenario: Discover and lint every Gherkin feature file in the repository
-    Given the live gh-meta repository workspace
+    Given the live gh-repoconf repository workspace
     When the Gherkin linter scans the workspace
     Then the Gherkin linter exits with code 0
     And feature files from both crates and automation are linted
@@ -28,6 +28,6 @@ Feature: Repository automation and policy tools
     Then the local audit wrapper decides "fail"
 
   Scenario: Validate repository Agent Skills and lockfile
-    Given the live gh-meta repository workspace
+    Given the live gh-repoconf repository workspace
     When the skills validator inspects the workspace
     Then the skills validator finds zero problems

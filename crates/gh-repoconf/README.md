@@ -1,11 +1,11 @@
-# gh-meta
+# gh-repoconf
 
 Standalone CLI and GitHub CLI (`gh`) extension binary crate for
-[`gh-meta`](https://github.com/Archont561/gh-meta) — *Your `.github/`
+[`gh-repoconf`](https://github.com/Archont561/gh-repoconf) — *Your `.github/`
 directory, managed as code.*
 
-At this stage the binary is an intentional scaffold exposing `gh-meta
---version`, `-V`, `gh-meta version`, and `--help` before the full interactive
+At this stage the binary is an intentional scaffold exposing `gh-repoconf
+--version`, `-V`, `gh-repoconf version`, and `--help` before the full interactive
 and command workflows are added.
 
 It already depends on [`clifacet`](https://github.com/Archont561/clifacet) 0.5.0

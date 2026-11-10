@@ -10,8 +10,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE_DIRS = (
-    ROOT / "crates" / "gh-meta-core" / "src",
-    ROOT / "crates" / "gh-meta" / "src",
+    ROOT / "crates" / "gh-repoconf-core" / "src",
+    ROOT / "crates" / "gh-repoconf" / "src",
 )
 
 

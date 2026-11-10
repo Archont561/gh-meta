@@ -29,7 +29,7 @@ editing task Markdown manually.
 ## Engineering rules
 
 - Keep the Cargo workspace at the intentional **version-only scaffold**
-  (`crates/gh-meta-core` and `crates/gh-meta`, decision-3) until an approved
+  (`crates/gh-repoconf-core` and `crates/gh-repoconf`, decision-3) until an approved
   backlog task relaxes it. The single recorded exception is `clifacet` 0.5.0
   with every frontend feature disabled; enabling a frontend needs the `m-1`
   task decision-2 requires.
@@ -39,7 +39,7 @@ editing task Markdown manually.
   sync manifest versions via `pixi run --locked automation bump_version`.
 - Keep product code, features, and BDD tests inside `crates/*/{src,features,tests}`,
   Python automation and BDD suites inside `automation/{lib,features,tests}`
-  registered through `dodo.py`, and shell launchers in `scripts/`.
+  registered through `automation/dodo.py`, and shell launchers in `scripts/`.
 - Never edit generated outputs directly: update `vale.toml` and run
   `pixi run --locked automation prose_sync`; update `pixi-sandbox.toml` and run
   `pixi-sandbox init`.
@@ -51,7 +51,7 @@ editing task Markdown manually.
 - `pixi run --locked test-all` — Rust workspace tests (`nextest`) and doctests.
 - `pixi run --locked coverage` — Rust LCOV coverage gate (>= 90% source lines).
 - `pixi run --locked test-automation` — Python `pytest-bdd` and unit tests.
-- `pixi run --locked automation list` — list unified `doit` automation tasks in `dodo.py`.
+- `pixi run --locked automation list` — list unified `doit` automation tasks in `automation/dodo.py`.
 - `pixi run --locked -e packaging package` — Conda `rattler-build` verification.
 - `pixi run --locked -e pypi package-pypi` — PyPI wheel and `sdist` verification.
 - See [docs/guides/running-the-checks.md](docs/guides/running-the-checks.md)
@@ -70,7 +70,7 @@ editing task Markdown manually.
 <!-- markdownlint-disable MD022 MD032 MD034 MD036 -->
 <!-- agents-md:begin id=overview -->
 ## Overview
-gh-meta — Your .github/ directory, managed as code. Early version-only Rust CLI scaffold with developer CLIs provisioned here and in pixi.lock. Stack: node.
+gh-repoconf — Your .github/ directory, managed as code. Early version-only Rust CLI scaffold with developer CLIs provisioned here and in pixi.lock. Stack: node.
 <!-- agents-md:end id=overview -->
 
 <!-- agents-md:begin id=commands -->
@@ -90,7 +90,7 @@ _TBD: how tests are run and what must pass before a change is considered done_
 
 <!-- agents-md:begin id=structure -->
 ## Project structure
-Top-level: `automation/`, `backlog/`, `crates/`, `docs/`, `scripts/`. Root `dodo.py` registers Python automation CLI tasks via `doit`.
+Top-level: `automation/`, `backlog/`, `crates/`, `docs/`, `scripts/`. `automation/dodo.py` registers Python automation CLI tasks via `doit`.
 <!-- agents-md:end id=structure -->
 
 <!-- agents-md:begin id=conventions -->
@@ -100,7 +100,7 @@ _TBD: formatter/linter, naming, import patterns, anything an agent should match_
 
 <!-- agents-md:begin id=git -->
 ## Git & PR workflow
-Default branch `main`. Remote: https://github.com/Archont561/gh-meta. _TBD: commit/PR conventions, how changes ship (CI? automated releases?)_
+Default branch `main`. Remote: https://github.com/Archont561/gh-repoconf. _TBD: commit/PR conventions, how changes ship (CI? automated releases?)_
 <!-- agents-md:end id=git -->
 
 <!-- agents-md:begin id=gotchas -->

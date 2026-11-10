@@ -1,6 +1,6 @@
 # Documentation standard
 
-Documentation in `docs/` is the maintained source of truth for `gh-meta`
+Documentation in `docs/` is the maintained source of truth for `gh-repoconf`
 behavior, tooling, and architecture.
 
 ## Principles

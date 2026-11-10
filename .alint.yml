@@ -88,9 +88,9 @@ rules:
 
   - id: require-dodo-py
     kind: file_exists
-    paths: dodo.py
+    paths: automation/dodo.py
     level: error
-    message: Required dodo.py task registry is missing.
+    message: Required automation/dodo.py task registry is missing.
 
   - id: require-automation-package
     kind: file_exists
@@ -100,15 +100,15 @@ rules:
 
   - id: require-conda-recipe
     kind: file_exists
-    paths: crates/gh-meta/recipe/recipe.yaml
+    paths: crates/gh-repoconf/recipe/recipe.yaml
     level: error
-    message: Required crates/gh-meta/recipe/recipe.yaml is missing.
+    message: Required crates/gh-repoconf/recipe/recipe.yaml is missing.
 
   - id: require-conda-variants
     kind: file_exists
-    paths: crates/gh-meta/recipe/variants.yaml
+    paths: crates/gh-repoconf/recipe/variants.yaml
     level: error
-    message: Required crates/gh-meta/recipe/variants.yaml is missing.
+    message: Required crates/gh-repoconf/recipe/variants.yaml is missing.
 
   - id: require-bun-manifest
     kind: file_exists
@@ -192,7 +192,7 @@ rules:
     kind: file_absent
     paths: pyproject.toml
     level: error
-    message: Root pyproject.toml is forbidden; repository automation lives in dodo.py and automation/.
+    message: Root pyproject.toml is forbidden; repository automation lives in automation/dodo.py.
 
   - id: forbid-root-recipe
     kind: dir_absent
@@ -202,9 +202,9 @@ rules:
 
   - id: require-pypi-manifest
     kind: file_exists
-    paths: crates/gh-meta/pyproject.toml
+    paths: crates/gh-repoconf/pyproject.toml
     level: error
-    message: Required crates/gh-meta/pyproject.toml is missing.
+    message: Required crates/gh-repoconf/pyproject.toml is missing.
 
   - id: crates-contain-required-files
     kind: dir_contains

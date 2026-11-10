@@ -53,7 +53,7 @@ issuePrefixes:
   - "fixes #"
 host: https://github.com
 owner: Archont561
-repository: gh-meta
+repository: gh-repoconf
 scopeRegex: "[[:alnum:]]+(?:[-_/][[:alnum:]]+)*"
 lineLength: 100
 wrapDisabled: false

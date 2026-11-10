@@ -1,5 +1,5 @@
 ---
-id: ghm-002
+id: rep-002
 title: Implement clifacet interactive init and GitHub metadata plan workflows
 status: To Do
 priority: medium
@@ -8,7 +8,7 @@ labels:
   - cli
   - ui
 dependencies:
-  - ghm-001
+  - rep-001
 created_date: '2026-11-09'
 updated_date: '2026-11-09'
 ---
@@ -19,7 +19,7 @@ Introduce the declarative `.github/` configuration schema, repository state plan
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Document config schema and Gherkin scenarios for `gh-meta init` and `gh-meta plan` before adding implementation crates.
+- [ ] #1 Document config schema and Gherkin scenarios for `gh-repoconf init` and `gh-repoconf plan` before adding implementation crates.
 - [ ] #2 Add `Archont561/clifacet` dependency and headless BDD tests covering scripted interactive prompts.
 - [ ] #3 Update `docs/` and release verification checks to cover new interactive commands.
 <!-- AC:END -->

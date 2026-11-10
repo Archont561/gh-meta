@@ -11,12 +11,12 @@
 ├── automation/            # Python automation modules, `lib/`, `features/`, `tests/`
 ├── backlog/               # Product spec, ADRs, milestones, and Backlog.md tasks
 ├── crates/
-│   ├── gh-meta-core/      # Core crate (`src/`, `features/`, `tests/`, `LICENSE`)
-│   └── gh-meta/           # CLI crate (`src/`, `recipe/`, `pyproject.toml`, `features/`, `tests/`, `LICENSE`)
+│   ├── gh-repoconf-core/      # Core crate (`src/`, `features/`, `tests/`, `LICENSE`)
+│   └── gh-repoconf/           # CLI crate (`src/`, `recipe/`, `pyproject.toml`, `features/`, `tests/`, `LICENSE`)
 ├── docs/                  # Canonical user and developer documentation
 ├── scripts/               # Shell setup and sandbox restore scripts (`restore.sh`, `bootstrap.sh`, `install_hooks.sh`)
 ├── Cargo.toml             # Root Cargo workspace manifest
-├── dodo.py                # Unified doit automation task registry (`pixi run automation`)
+├── automation/dodo.py     # Unified doit automation task registry (`pixi run automation`)
 ├── pixi.toml              # Locked Pixi workspace and task definitions
 ├── pixi-sandbox.toml      # Sandbox publication policy
 ├── package.json           # Developer Bun CLI manifest

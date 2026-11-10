@@ -6,8 +6,8 @@ coverage:
         target: 90%
         threshold: 0%
         paths:
-          - "crates/gh-meta/src/"
-          - "crates/gh-meta-core/src/"
+          - "crates/gh-repoconf/src/"
+          - "crates/gh-repoconf-core/src/"
     patch: false
 
 ignore:

@@ -1,17 +1,17 @@
 {
-  "name": "gh-meta-dev",
+  "name": "gh-repoconf-dev",
   "private": true,
   "version": "0.1.0",
-  "description": "gh-meta — Your .github/ directory, managed as code. Early version-only Rust CLI scaffold with developer CLIs provisioned here and in pixi.lock.",
+  "description": "gh-repoconf — Your .github/ directory, managed as code. Early version-only Rust CLI scaffold with developer CLIs provisioned here and in pixi.lock.",
   "author": "Archont561",
   "license": "MIT",
-  "homepage": "https://github.com/Archont561/gh-meta#readme",
+  "homepage": "https://github.com/Archont561/gh-repoconf#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Archont561/gh-meta.git"
+    "url": "git+https://github.com/Archont561/gh-repoconf.git"
   },
   "bugs": {
-    "url": "https://github.com/Archont561/gh-meta/issues"
+    "url": "https://github.com/Archont561/gh-repoconf/issues"
   },
   "packageManager": "bun@1.4.2",
   "devDependencies": {
