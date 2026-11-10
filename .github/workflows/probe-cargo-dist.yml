@@ -110,9 +110,11 @@ jobs:
           emit GIT_STATUS "$(git status --porcelain | tr '\n' '|' || echo none)"
           emit COST "crates-added=$(git diff -- Cargo.lock | grep -c '^+name = ') | lock-before=$(wc -c < /tmp/probe/Cargo.lock.before) | lock-after=$(wc -c < Cargo.lock)"
           emit TIME "$(cat /tmp/probe/install.time 2>/dev/null)"
-          emit MANIFEST "$(git diff -- Cargo.toml | grep '^+' | tr '\n' '|' || echo 'no Cargo.toml change')"
+          emit MANIFEST "$(git diff -- '*Cargo.toml' | grep '^+' | tr '\n' '|' || echo 'no Cargo.toml change')"
 
       - name: Emit both patches
+        if: always()
+        continue-on-error: true
         shell: bash
         run: |
           # Patch A = install only. Reconstruct it as empty-vs-changed from the copy.
@@ -134,8 +136,11 @@ jobs:
                   print(f"::error title={name}::EMPTY")
                   continue
               b64 = base64.b64encode(p.read_bytes()).decode()
-              for i in range(0, len(b64), 690):
-                  print(f"::error title={name}-{i//690}::{b64[i:i+690]}")
+              chunks = [b64[i:i+690] for i in range(0, len(b64), 690)]
+              print(f"::error title={name}_CHUNKS::{len(chunks)} chunks, {len(b64)} b64 bytes")
+              # Cap emission: the channel cannot carry a 100 KB patch.
+              for i, c in enumerate(chunks[:12]):
+                  print(f"::error title={name}-{i}::{c}")
           PY
 
       - name: Upload patches
