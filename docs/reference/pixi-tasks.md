@@ -21,6 +21,7 @@ through `pixi run automation <task>` (`doit`).
 | `coverage` | Generate Rust LCOV report and run `doit check_coverage` (90% threshold) |
 | `build-release` | Compile `target/release/gh-meta` with `--locked` |
 | `lint-python` / `format-python-check` | Check `dodo.py` and `automation/` with `ruff` |
+| `rude-clean` | Check Clean Code thresholds in `dodo.py` and `automation/` with `rude` |
 | `typecheck` | Type-check `dodo.py` and `automation/` with `mypy` |
 | `test-automation` / `test-automation-cov` | Run Python `pytest-bdd` and unit test suites |
 | `alint` | Check `.alint.yml` repository structural rules |

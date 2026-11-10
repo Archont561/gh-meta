@@ -19,6 +19,7 @@ pixi run --locked -e pypi package-pypi
 
 ```sh
 pixi run --locked lint-python
+pixi run --locked rude-clean
 pixi run --locked format-python-check
 pixi run --locked typecheck
 pixi run --locked test-automation
