@@ -9,6 +9,8 @@ struct CliWorld {
     status: Option<i32>,
     stdout: String,
     stderr: String,
+    token: String,
+    rendered: String,
 }
 
 #[fixture]
@@ -98,5 +100,46 @@ fn print_version_subcommand(world: CliWorld) {
 
 #[scenario(path = "features/cli_version.feature", name = "Reject unknown flag")]
 fn reject_unknown_flag(world: CliWorld) {
+    let _ = world;
+}
+
+#[given("a token value \"{token}\"")]
+fn given_token_value(world: &mut CliWorld, token: String) {
+    world.token = token;
+}
+
+#[when("it is rendered through the clifacet seam")]
+fn render_through_seam(world: &mut CliWorld) {
+    world.rendered = gh_meta::redacted(world.token.clone());
+}
+
+#[then("the rendered value equals \"{expected}\"")]
+fn check_rendered_equals(world: &CliWorld, expected: String) {
+    assert_eq!(world.rendered, expected);
+}
+
+#[then("the rendered value does not contain the token")]
+fn check_rendered_hides_token(world: &CliWorld) {
+    assert!(
+        !world.rendered.contains(&world.token),
+        "expected the rendered value to hide {:?}, got {:?}",
+        world.token,
+        world.rendered
+    );
+}
+
+#[scenario(
+    path = "features/cli_secret.feature",
+    name = "A classic token renders as the redaction marker"
+)]
+fn token_renders_as_marker(world: CliWorld) {
+    let _ = world;
+}
+
+#[scenario(
+    path = "features/cli_secret.feature",
+    name = "A fine-grained token never appears in rendered output"
+)]
+fn token_never_appears(world: CliWorld) {
     let _ = world;
 }

@@ -20,11 +20,15 @@
 ## Planned interactive UI (`clifacet`)
 
 Per [decision-2](../../backlog/decisions/decision-2%20-%20Adopt-clifacet-for-interactive-UI.md),
-interactive wizards, confirmations, and terminal views will adopt
-[`Archont561/clifacet`](https://github.com/Archont561/clifacet). Initial `m-0`
-releases omit `clifacet` from runtime dependencies so standalone binary and
-Conda recipe builds remain small and fast while version/packaging/BDD pipelines
-stabilize.
+interactive wizards, confirmations, and terminal views adopt
+[`Archont561/clifacet`](https://github.com/Archont561/clifacet).
+
+`clifacet` 0.5.0 is a runtime dependency of the `gh-meta` binary crate with
+**every frontend feature disabled**. Its mandatory surface is the command seam
+(`Command`), its failure type (`Failure`), and `secret::Secret`; the interactive
+(`inquire`) and full-screen (`ratatui` + `crossterm`) frontends stay off until a
+command needs one, which keeps standalone binary and Conda recipe builds small.
+`gh-meta-core` keeps no runtime dependencies.
 
 ## Distribution targets
 

@@ -32,6 +32,7 @@ workspace = true
 
 [dependencies]
 clap.workspace = true
+clifacet.workspace = true
 gh-meta-core.workspace = true
 
 [dev-dependencies]
