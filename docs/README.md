@@ -21,6 +21,7 @@ Every document here reflects verified repository state and is checked by
 - [Releasing and Trusted Publishing](guides/releasing.md)
 - [Version-only scaffold](concepts/version-only-scaffold.md)
 - [Architecture overview](architecture/overview.md)
+- [Project name](architecture/project-name.md) — why `gh-repoconf`, and what was rejected
 - [Pixi tasks reference](reference/pixi-tasks.md)
 - [Repository layout reference](reference/repository-layout.md)
 - [Documentation standard](development/documentation.md)
