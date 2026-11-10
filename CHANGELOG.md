@@ -20,8 +20,17 @@ file.
 * **automation:** add doit automation catalog and checks
 ([0724e2b](https://github.com/Archont561/gh-repoconf/commit/0724e2be330874f51a93dc05921c3451d07d31ca))
 
+### Fixed
+
+* **ci:** point the coverage task at the moved registry
+([4d662df](https://github.com/Archont561/gh-repoconf/commit/4d662df30188dfe66bdd2d64a7cd659e0d96af54))
+* **automation:** keep the registry importable from its new location
+([68c6c6c](https://github.com/Archont561/gh-repoconf/commit/68c6c6cc61d5a79a2de8205c559fcfc1b5bf9544))
+
 ### Changed
 
+* **automation:** move the doit registry to automation/dodo.py
+([a919bb7](https://github.com/Archont561/gh-repoconf/commit/a919bb7816276fadeef3ee00660ba1560885a5b9))
 * **automation:** follow the gh-repoconf rename
 ([b4c03ca](https://github.com/Archont561/gh-repoconf/commit/b4c03ca99a9f914d9e1ea1a6113c611a83a5f052))
 * rename crates to gh-repoconf and gh-repoconf-core
