@@ -1,5 +1,5 @@
 [package]
-name = "gh-meta"
+name = "gh-repoconf"
 description = "Your .github/ directory, managed as code (standalone CLI and gh extension)"
 readme = "README.md"
 exclude = ["features/", "tests/*_bdd.rs", "pyproject.toml", "recipe/"]
@@ -12,12 +12,12 @@ repository.workspace = true
 authors.workspace = true
 
 [[bin]]
-name = "gh-meta"
+name = "gh-repoconf"
 path = "src/main.rs"
 
 [package.metadata.npm]
-prefix = "@archont561/gh-meta-"
-bins = ["gh-meta"]
+prefix = "@archont561/gh-repoconf-"
+bins = ["gh-repoconf"]
 targets = [
   "x86_64-unknown-linux-musl",
   "aarch64-unknown-linux-musl",
@@ -33,7 +33,7 @@ workspace = true
 [dependencies]
 clap.workspace = true
 clifacet.workspace = true
-gh-meta-core.workspace = true
+gh-repoconf-core.workspace = true
 
 [dev-dependencies]
 assert_cmd.workspace = true

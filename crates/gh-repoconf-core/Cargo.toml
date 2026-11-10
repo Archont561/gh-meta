@@ -1,6 +1,6 @@
 [package]
-name = "gh-meta-core"
-description = "Core crate for gh-meta (initial version-only scaffold)"
+name = "gh-repoconf-core"
+description = "Core crate for gh-repoconf (initial version-only scaffold)"
 readme = "README.md"
 exclude = ["features/", "tests/*_bdd.rs"]
 version.workspace = true

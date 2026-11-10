@@ -1,11 +1,11 @@
-# Conda package recipe for the standalone gh-meta CLI binary.
+# Conda package recipe for the standalone gh-repoconf CLI binary.
 schema_version: 1
 
 context:
   version: "0.1.0"
 
 package:
-  name: gh-meta
+  name: gh-repoconf
   version: ${{ version }}
 
 source:
@@ -32,13 +32,13 @@ build:
     content:
       - if: unix
         then:
-          - cargo build --release --locked --package gh-meta
+          - cargo build --release --locked --package gh-repoconf
           - mkdir -p "$PREFIX/bin"
-          - install -m 0755 target/release/gh-meta "$PREFIX/bin/gh-meta"
+          - install -m 0755 target/release/gh-repoconf "$PREFIX/bin/gh-repoconf"
         else:
-          - cargo build --release --locked --package gh-meta
+          - cargo build --release --locked --package gh-repoconf
           - if not exist "%LIBRARY_BIN%" mkdir "%LIBRARY_BIN%"
-          - copy /Y "target\release\gh-meta.exe" "%LIBRARY_BIN%\gh-meta.exe"
+          - copy /Y "target\release\gh-repoconf.exe" "%LIBRARY_BIN%\gh-repoconf.exe"
 
 requirements:
   build:
@@ -48,12 +48,12 @@ requirements:
 
 tests:
   - script:
-      - gh-meta --version
-      - gh-meta --help
+      - gh-repoconf --version
+      - gh-repoconf --help
 
 about:
   summary: Your .github/ directory, managed as code
   license: MIT
   license_file: LICENSE
-  homepage: https://github.com/Archont561/gh-meta
-  repository: https://github.com/Archont561/gh-meta
+  homepage: https://github.com/Archont561/gh-repoconf
+  repository: https://github.com/Archont561/gh-repoconf

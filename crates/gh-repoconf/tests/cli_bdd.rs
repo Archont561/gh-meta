@@ -26,11 +26,11 @@ fn given_command_with_arg(world: &mut CliWorld, binary: String, arg: String) {
 
 #[when("it runs")]
 fn run_command(world: &mut CliWorld) {
-    assert_eq!(world.binary, "gh-meta");
-    let output = cargo_bin_cmd!("gh-meta")
+    assert_eq!(world.binary, "gh-repoconf");
+    let output = cargo_bin_cmd!("gh-repoconf")
         .arg(&world.arg)
         .output()
-        .expect("compiled gh-meta binary should execute");
+        .expect("compiled gh-repoconf binary should execute");
     world.status = output.status.code();
     world.stdout = String::from_utf8(output.stdout).expect("stdout must be UTF-8");
     world.stderr = String::from_utf8(output.stderr).expect("stderr must be UTF-8");
@@ -110,7 +110,7 @@ fn given_token_value(world: &mut CliWorld, token: String) {
 
 #[when("it is rendered through the clifacet seam")]
 fn render_through_seam(world: &mut CliWorld) {
-    world.rendered = gh_meta::redacted(&world.token);
+    world.rendered = gh_repoconf::redacted(&world.token);
 }
 
 #[then("the rendered value equals \"{expected}\"")]
