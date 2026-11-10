@@ -77,7 +77,10 @@ where
             if matches.get_flag("version") || matches.subcommand_name() == Some("version") {
                 return CliOutcome {
                     exit_code: 0,
-                    stdout: format!("{}\n", gh_repoconf_core::format_version_banner("gh-repoconf")),
+                    stdout: format!(
+                        "{}\n",
+                        gh_repoconf_core::format_version_banner("gh-repoconf")
+                    ),
                     stderr: String::new(),
                 };
             }
