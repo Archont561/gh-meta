@@ -112,6 +112,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.16.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2026e-h5d301ff_0.conda
       - conda: https://prefix.dev/archont561/archont561/linux-64/pixi-sandbox-0.9.0-ha35fb5c_0.conda
+      - pypi: https://files.pythonhosted.org/packages/17/ee/02e1a36063b7d135086c474cd204c5ee8fda92f01ee4a90c27e2da127708/rude_clean_code-0.1.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/31/7d/164b7ffc8624fe9efb4221bf9af485d5c1e41b9ae118045d2b6dc5457d8b/click-8.5.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/4b/04/1f16eba1ffc5e0f5ae7b5bfd1847e8f0355c03bf67c34381d6cc5b7b2b2b/gherkin_official-42.0.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/63/e0/cec6865dfe88cb48fedd4b20aed6af5158e41092adcbf3e028bcc6ec2108/markupsafe-3.0.4-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
@@ -119,6 +120,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/72/f5/83179949035ff69c204beb71e48a349c2ea7653caadac951bcc6a11683b9/pydantic-1.10.27-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/7e/e5/ab51cd252d2c1f1419cf03fc0e5b85af11545cffde08d9f69ca27ebe7972/gherlint-0.5.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/85/8d/eef3d8cdccc32abdd91b1286884c99b8c3a6d3b135affcc2a7a0f383bb32/parse_type-0.6.6-py2.py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/86/5d/e720b313a6c4af07f1908b7893f2a79bf006ea2abc88428225ebc20d41ec/rude-0.1a4-cp311-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/8f/5f/fbe039e06108eefad9e6b1f7d915a9c73ca0451700c7d48ce05eaa3a2833/parse-1.22.4-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/c5/21/325481927d82a905707c87f84ffe6a6cf007c8c43853e5359b6b657b4f12/pytest_bdd-9.0.1-py3-none-any.whl
@@ -244,6 +246,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.16.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2026e-h5d301ff_0.conda
       - conda: https://prefix.dev/archont561/archont561/linux-64/pixi-sandbox-0.9.0-ha35fb5c_0.conda
+      - pypi: https://files.pythonhosted.org/packages/17/ee/02e1a36063b7d135086c474cd204c5ee8fda92f01ee4a90c27e2da127708/rude_clean_code-0.1.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/31/7d/164b7ffc8624fe9efb4221bf9af485d5c1e41b9ae118045d2b6dc5457d8b/click-8.5.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/4b/04/1f16eba1ffc5e0f5ae7b5bfd1847e8f0355c03bf67c34381d6cc5b7b2b2b/gherkin_official-42.0.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/63/e0/cec6865dfe88cb48fedd4b20aed6af5158e41092adcbf3e028bcc6ec2108/markupsafe-3.0.4-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
@@ -251,6 +254,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/72/f5/83179949035ff69c204beb71e48a349c2ea7653caadac951bcc6a11683b9/pydantic-1.10.27-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/7e/e5/ab51cd252d2c1f1419cf03fc0e5b85af11545cffde08d9f69ca27ebe7972/gherlint-0.5.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/85/8d/eef3d8cdccc32abdd91b1286884c99b8c3a6d3b135affcc2a7a0f383bb32/parse_type-0.6.6-py2.py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/86/5d/e720b313a6c4af07f1908b7893f2a79bf006ea2abc88428225ebc20d41ec/rude-0.1a4-cp311-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/8f/5f/fbe039e06108eefad9e6b1f7d915a9c73ca0451700c7d48ce05eaa3a2833/parse-1.22.4-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/c5/21/325481927d82a905707c87f84ffe6a6cf007c8c43853e5359b6b657b4f12/pytest_bdd-9.0.1-py3-none-any.whl
@@ -1589,7 +1593,6 @@ packages:
 - conda: https://prefix.dev/archont561/archont561/linux-64/pixi-sandbox-0.9.0-ha35fb5c_0.conda
   sha256: 0fdfa22127b027d1d1e391fa91601d124125831a2576b7010166018df60856ba
   md5: 3ce749fd1eba2a30d483c9fc0dff9669
-  attestations_sha256: 4709f4894683046b662adfab66f27f3647432686af5e20e0a77d898eafdd47e4
   depends:
   - libgcc >=16
   - __glibc >=2.28,<3.0.a0
@@ -1599,6 +1602,13 @@ packages:
   run_exports: {}
   size: 3226011
   timestamp: 1792941221793
+- pypi: https://files.pythonhosted.org/packages/17/ee/02e1a36063b7d135086c474cd204c5ee8fda92f01ee4a90c27e2da127708/rude_clean_code-0.1.0-py3-none-any.whl
+  name: rude-clean-code
+  version: 0.1.0
+  sha256: 1bd6645d9801e932c6d96bd19462c08a3ef816bcfec78fbda04c44b3283a6f4e
+  requires_dist:
+  - rude>=0.1a4,<0.2
+  requires_python: '>=3.11'
 - pypi: https://files.pythonhosted.org/packages/31/7d/164b7ffc8624fe9efb4221bf9af485d5c1e41b9ae118045d2b6dc5457d8b/click-8.5.1-py3-none-any.whl
   name: click
   version: 8.5.1
@@ -1676,6 +1686,11 @@ packages:
   - pytest>=5.0 ; python_full_version >= '3' and extra == 'testing'
   - pytest-html>=1.19.0 ; extra == 'testing'
   requires_python: '>=2.7,!=3.0.*,!=3.1.*'
+- pypi: https://files.pythonhosted.org/packages/86/5d/e720b313a6c4af07f1908b7893f2a79bf006ea2abc88428225ebc20d41ec/rude-0.1a4-cp311-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+  name: rude
+  version: 0.1a4
+  sha256: e076477f9e206338521d50493cf9044a2353b37b778d0cb974ac0f4bc85828a0
+  requires_python: '>=3.11'
 - pypi: https://files.pythonhosted.org/packages/8f/5f/fbe039e06108eefad9e6b1f7d915a9c73ca0451700c7d48ce05eaa3a2833/parse-1.22.4-py2.py3-none-any.whl
   name: parse
   version: 1.22.4
