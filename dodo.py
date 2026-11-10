@@ -1,4 +1,4 @@
-"""Central doit task registry consolidating gh-meta repository automation."""
+"""Central doit task registry consolidating gh-repoconf repository automation."""
 
 from __future__ import annotations
 
@@ -378,14 +378,14 @@ def _prose_write() -> bool:
 
 
 def task_prose_write() -> dict[str, Any]:
-    """Render .vale.ini and GhMeta Vale styles incrementally from vale.toml."""
+    """Render .vale.ini and GhRepoconf Vale styles incrementally from vale.toml."""
     return {
         "actions": [_prose_write],
         "file_dep": ["vale.toml", "automation/prose.py"],
         "targets": [
             ".vale.ini",
-            str(Path(".vale/styles/config/vocabularies/GhMeta/accept.txt")),
-            str(Path(".vale/styles/GhMeta/American.yml")),
+            str(Path(".vale/styles/config/vocabularies/GhRepoconf/accept.txt")),
+            str(Path(".vale/styles/GhRepoconf/American.yml")),
         ],
     }
 
