@@ -140,6 +140,23 @@ jobs:
         run: pixi run --frozen actionlint
       - name: Lint TOML formatting
         run: pixi run --frozen lint-toml
+      - name: TEMP rust diagnostics
+        if: always()
+        shell: bash
+        run: |
+          set +e
+          for step in "fmt-check" "clippy"; do
+            out=$(pixi run --frozen $step 2>&1); rc=$?
+            echo "::error title=RC[${step}]::rc=${rc}"
+            b64=$(printf '%s' "$out" | tail -c 1800 | base64 -w0)
+            i=0
+            while [ -n "$b64" ]; do
+              echo "::error title=D_${step}_${i}::${b64:0:600}"
+              b64=${b64:600}
+              i=$((i+1))
+            done
+          done
+          exit 0
       - name: Check Rust formatting and Clippy
         run: |
           pixi run --frozen fmt-check
