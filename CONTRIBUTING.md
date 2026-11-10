@@ -1,6 +1,6 @@
-# Contributing to gh-meta
+# Contributing to gh-repoconf
 
-`gh-meta` is an early scaffold for managing `.github/` configuration as code.
+`gh-repoconf` is an early scaffold for managing `.github/` configuration as code.
 The `clifacet` command seam is wired with no frontend enabled; domain commands
 have not landed yet. Read the specification and ADRs under
 [backlog/](backlog/README.md) before proposing new features, and avoid
@@ -26,7 +26,7 @@ and troubleshooting notes.
 1. Survey active tasks and ADRs using `pixi run --locked backlog`. Update task
    cards through the `backlog` CLI rather than hand-editing files.
 2. Keep Rust code, features, and BDD tests inside the owning crate
-   (`crates/gh-meta-core/` or `crates/gh-meta/`), Python automation modules
+   (`crates/gh-repoconf-core/` or `crates/gh-repoconf/`), Python automation modules
    and BDD tests under `automation/` (`automation/lib/`,
    `automation/features/`, `automation/tests/`) registered in `dodo.py`, and
    shell bootstrap helpers under `scripts/`.

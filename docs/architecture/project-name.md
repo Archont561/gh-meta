@@ -38,7 +38,7 @@ name carries no collision risk.
 
 ## Rename status
 
-The name is frozen. The repository content still uses `gh-meta` throughout; the
+The name is frozen. The repository content still uses `gh-repoconf` throughout; the
 rename is a separate change, and renaming the GitHub repository itself is a
 Settings action for the maintainer. GitHub redirects old paths, so existing links
 keep resolving.

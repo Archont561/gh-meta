@@ -19,7 +19,7 @@ through `pixi run automation <task>` (`doit`).
 | `clippy` | Run Clippy over all workspace targets with `-D warnings` |
 | `test` / `test-doc` / `test-all` | Run `cargo nextest` BDD/unit suites and Rust doctests |
 | `coverage` | Generate Rust LCOV report and run `doit check_coverage` (90% threshold) |
-| `build-release` | Compile `target/release/gh-meta` with `--locked` |
+| `build-release` | Compile `target/release/gh-repoconf` with `--locked` |
 | `lint-python` / `format-python-check` | Check `dodo.py` and `automation/` with `ruff` |
 | `rude-clean` | Check Clean Code thresholds in `dodo.py` and `automation/` with `rude` |
 | `typecheck` | Type-check `dodo.py` and `automation/` with `mypy` |

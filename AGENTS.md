@@ -29,7 +29,7 @@ editing task Markdown manually.
 ## Engineering rules
 
 - Keep the Cargo workspace at the intentional **version-only scaffold**
-  (`crates/gh-meta-core` and `crates/gh-meta`, decision-3) until an approved
+  (`crates/gh-repoconf-core` and `crates/gh-repoconf`, decision-3) until an approved
   backlog task relaxes it. The single recorded exception is `clifacet` 0.5.0
   with every frontend feature disabled; enabling a frontend needs the `m-1`
   task decision-2 requires.
@@ -70,7 +70,7 @@ editing task Markdown manually.
 <!-- markdownlint-disable MD022 MD032 MD034 MD036 -->
 <!-- agents-md:begin id=overview -->
 ## Overview
-gh-meta — Your .github/ directory, managed as code. Early version-only Rust CLI scaffold with developer CLIs provisioned here and in pixi.lock. Stack: node.
+gh-repoconf — Your .github/ directory, managed as code. Early version-only Rust CLI scaffold with developer CLIs provisioned here and in pixi.lock. Stack: node.
 <!-- agents-md:end id=overview -->
 
 <!-- agents-md:begin id=commands -->
@@ -100,7 +100,7 @@ _TBD: formatter/linter, naming, import patterns, anything an agent should match_
 
 <!-- agents-md:begin id=git -->
 ## Git & PR workflow
-Default branch `main`. Remote: https://github.com/Archont561/gh-meta. _TBD: commit/PR conventions, how changes ship (CI? automated releases?)_
+Default branch `main`. Remote: https://github.com/Archont561/gh-repoconf. _TBD: commit/PR conventions, how changes ship (CI? automated releases?)_
 <!-- agents-md:end id=git -->
 
 <!-- agents-md:begin id=gotchas -->

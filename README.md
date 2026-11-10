@@ -1,20 +1,20 @@
-<h1 align="center">Welcome to gh-meta 👋</h1>
+<h1 align="center">Welcome to gh-repoconf 👋</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-0.1.0-blue.svg?cacheSeconds=2592000" />
   <a href="docs/README.md" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
   </a>
-  <a href="https://github.com/Archont561/gh-meta/graphs/commit-activity" target="_blank">
+  <a href="https://github.com/Archont561/gh-repoconf/graphs/commit-activity" target="_blank">
     <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
   </a>
   <a href="LICENSE" target="_blank">
-    <img alt="License: MIT" src="https://img.shields.io/github/license/Archont561/gh-meta" />
+    <img alt="License: MIT" src="https://img.shields.io/github/license/Archont561/gh-repoconf" />
   </a>
 </p>
 
 > Your .github/ directory, managed as code. An early Rust CLI scaffold: the two-crate workspace, packaging pipelines, and repository automation are in place, and the `clifacet` command seam is wired with no frontend enabled. Domain commands have not landed yet.
 
-### 🏠 [Homepage](https://github.com/Archont561/gh-meta#readme)
+### 🏠 [Homepage](https://github.com/Archont561/gh-repoconf#readme)
 
 ## Documentation
 
@@ -46,10 +46,10 @@ pixi install --locked
 
 ```sh
 pixi run --locked build-release
-./target/release/gh-meta --version
+./target/release/gh-repoconf --version
 ```
 
-Build the Conda package (`crates/gh-meta/recipe/`) or PyPI distributions (`crates/gh-meta/pyproject.toml`) locally:
+Build the Conda package (`crates/gh-repoconf/recipe/`) or PyPI distributions (`crates/gh-repoconf/pyproject.toml`) locally:
 
 ```sh
 pixi run --locked -e packaging package
@@ -70,7 +70,7 @@ pixi run --locked test-all
 
 ## 🤝 Contributing
 
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/Archont561/gh-meta/issues). You can also take a look at the [contributing guide](CONTRIBUTING.md).
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/Archont561/gh-repoconf/issues). You can also take a look at the [contributing guide](CONTRIBUTING.md).
 
 ## Show your support
 

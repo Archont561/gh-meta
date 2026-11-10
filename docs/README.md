@@ -1,6 +1,6 @@
-# gh-meta Documentation
+# gh-repoconf Documentation
 
-This directory is the canonical user-facing knowledge layer of `gh-meta`.
+This directory is the canonical user-facing knowledge layer of `gh-repoconf`.
 Every document here reflects verified repository state and is checked by
 `markdownlint-cli2`, `Vale`, `lychee`, and `alint`.
 

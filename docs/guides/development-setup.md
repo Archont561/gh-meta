@@ -17,7 +17,7 @@ To build and verify the standalone binary directly:
 
 ```sh
 pixi run --locked build-release
-./target/release/gh-meta --version
+./target/release/gh-repoconf --version
 ```
 
 To build and smoke-test the Conda package with `rattler-build`:
